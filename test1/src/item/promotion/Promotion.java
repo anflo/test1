@@ -80,6 +80,21 @@ public class Promotion {
 		this.discountedPrice = discountedPrice;
 	}
 
+	
+
+
+	public List<ArrayList<Object>> getPromotionItemCombination() {
+		return promotionItemCombination;
+	}
+
+
+	/* 
+	 * Better not to be altered in any place except DB query
+	public void setPromotionItemCombination(List<ArrayList<Object>> promotionItemCombination) {
+		this.promotionItemCombination = promotionItemCombination;
+	}
+	*/
+
 
 
 	public boolean isOnPromotion() {

@@ -34,17 +34,17 @@ class UnitTest1_Item {
 		assertEquals(new BigDecimal("50"), this.a.getUnitPrice());
     	
 		cart.updateItem(a, 3);
-		assertEquals(cart.getQuanitiyOfSKU(a.getSku()), 3);
+		assertEquals(cart.getItemQuanitiy(a), 3);
 		cart.updateItem(a, 7);
-		assertEquals(cart.getQuanitiyOfSKU(a.getSku()), 7);
+		assertEquals(cart.getItemQuanitiy(a), 7);
     	cart.updateItem(b, 2);
     	cart.updateItem(c, 5);
     	cart.updateItem(d, 15);
-    	assertEquals(cart.getQuanitiyOfSKU(b.getSku()), 2);
-    	assertEquals(cart.getQuanitiyOfSKU(c.getSku()), 5);
-    	assertEquals(cart.getQuanitiyOfSKU(d.getSku()), 15);
+    	assertEquals(cart.getItemQuanitiy(b), 2);
+    	assertEquals(cart.getItemQuanitiy(c), 5);
+    	assertEquals(cart.getItemQuanitiy(d), 15);
     	cart.updateItem(c, 0);
-    	assertEquals(cart.getQuanitiyOfSKU(c.getSku()), 0);
+    	assertEquals(cart.getItemQuanitiy(c), 0);
 	}
 
 }
