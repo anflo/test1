@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import item.Item;
+import item.promotion.Promotion;
 
 public class Cart {
 
@@ -11,6 +12,13 @@ public class Cart {
 	private static int cartItemItemIndex = 0;
 	private static int cartItemQtyIndex = 1;
 	
+	private List<Promotion> promotionGroup = new ArrayList<Promotion>();
+	public List<Promotion> getPromotionGroup() {
+		return promotionGroup;
+	}
+	public void setPromotionGroup(List<Promotion> promotionGroup) {
+		this.promotionGroup = promotionGroup;
+	}
 	
 	public void updateItem(Item newItem, int newQuantity) {
 		if (this.myCart==null || this.myCart.size()<=0) {
@@ -61,6 +69,14 @@ public class Cart {
 	@Override
 	public String toString() {
 		return "Cart [myCart=" + myCart + "]";
+	}
+	public Cart() {
+		this(new ArrayList<ArrayList<Object>>(), new ArrayList<Promotion>());
+	}
+	public Cart(List<ArrayList<Object>> myCart, List<Promotion> promotionGroup) {
+		super();
+		this.myCart = myCart;
+		this.promotionGroup = promotionGroup;
 	}
 
 	

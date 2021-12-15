@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import cart.Cart;
 import item.Item;
 
-class UnitTest1 {
+class UnitTest1_Item {
 
 	protected Item a;
 	protected Item b;

@@ -27,6 +27,7 @@ public class Item {
 		this.unitPrice = unitPrice;
 	}
 	
+	/*
 	//------ new price period ----------//
 	//0=promotion start date time, 1=promotion end date time, 2=discount price in BigDecimal
 	private List<ArrayList<Object>> promotionInfoList = new ArrayList<ArrayList<Object>>();
@@ -72,16 +73,18 @@ public class Item {
 		}
 		return false;
 	}
-
+*/
 	
 	
 	@Override
 	public String toString() {
-		return "Item [sku=" + sku + ", unitPrice=" + unitPrice + ", promotionInfoList=" + promotionInfoList + "]";
+		//return "Item [sku=" + sku + ", unitPrice=" + unitPrice + ", promotionInfoList=" + promotionInfoList + "]";
+		return "Item [sku=" + sku + ", unitPrice=" + unitPrice + "]";
 	}
 	
 	//------ Constructor ----------//
 	public Item(String inputSKU, BigDecimal initUnitPrice) {
+		super();
 		this.sku = inputSKU;
 		this.unitPrice = initUnitPrice;
 	}

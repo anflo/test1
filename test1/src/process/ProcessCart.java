@@ -13,6 +13,7 @@ public class ProcessCart {
 	}
 	
 	public ProcessCart(Cart inputCart) {
+		super();
 		this.setMyCart(inputCart);
 	}
 	
