@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import item.Item;
+import item.ItemDB;
 import item.promotion.Promotion;
 
 class UnitTest2_Promotion {
@@ -31,10 +32,10 @@ class UnitTest2_Promotion {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		this.a = new Item("A", new BigDecimal("50"));
-		this.b = new Item("B", new BigDecimal("30"));
-		this.c = new Item("C", new BigDecimal("20"));
-		this.d = new Item("D", new BigDecimal("15"));
+		this.a = ItemDB.ITEM_A; //new Item("A", new BigDecimal("50"));
+		this.b = ItemDB.ITEM_B; //new Item("B", new BigDecimal("30"));
+		this.c = ItemDB.ITEM_C; //new Item("C", new BigDecimal("20"));
+		this.d = ItemDB.ITEM_D; //new Item("D", new BigDecimal("15"));
 		
 		
 		//promotion set A

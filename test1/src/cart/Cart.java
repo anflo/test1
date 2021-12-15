@@ -10,8 +10,12 @@ public class Cart {
 	//0=Item, 1=quantity
 	private List<ArrayList<Object>> myCart; //each node, 0=item, 1=qty
 	//myCart stores for non-promotion items only
-	private static int cartItemItemIndex = 0;
-	private static int cartItemQtyIndex = 1;
+	public final static int cartItemItemIndex = 0;
+	public final static int cartItemQtyIndex = 1;
+	public List<ArrayList<Object>> getMyCart(){
+		return this.myCart;
+	}
+	
 	
 	private List<Promotion> promotionGroup = new ArrayList<Promotion>();
 	public List<Promotion> getPromotionGroup() {
@@ -141,6 +145,16 @@ public class Cart {
 		promotionGroup.add(p);
 	}
 
+	//calculate promotion based on the cart
+	public void applyPromotion() {
+		if(promotionGroup!=null && promotionGroup.size()>0) {
+			dismissAllAppliedPromotionGroup(); //make sure all promotion has been removed
+		}
+		
+		
+		
+	}
+	
 	@Override
 	public String toString() {
 		return "Cart [myCart=" + myCart + ", promotionGroup=" + promotionGroup + "]";
@@ -154,7 +168,5 @@ public class Cart {
 		this.promotionGroup = promotionGroup;
 	}
 
-	
-	
 }
 
