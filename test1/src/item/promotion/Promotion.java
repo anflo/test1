@@ -16,7 +16,12 @@ public class Promotion {
 	private BigDecimal discountPect; //how many % off from original price, should be between 1-100 only
 	private BigDecimal discountedPrice;
 	
-	public Promotion(Calendar promotionStartDateTime, Calendar promotionEndDateTime, List<ArrayList<Object>> promotionItemCombination, int discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
+	private boolean isOriginalTotalPriceCached = false; //cache promotion calcuation if calculated already
+	private BigDecimal originalTotalPrice;
+//	private BigDecimal calculatedDiscountPrice;
+//	private BigDecimal calculatedTotalSaved; //wont do this since the calculation is simple already.
+	
+ 	public Promotion(Calendar promotionStartDateTime, Calendar promotionEndDateTime, List<ArrayList<Object>> promotionItemCombination, int discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
 		super();
 		this.promotionStartDateTime = promotionStartDateTime;
 		this.promotionEndDateTime = promotionEndDateTime;
@@ -88,18 +93,38 @@ public class Promotion {
 		return false;
 	}
 
+	public BigDecimal getDiscountPectForPriceCalculation() {
+		if(this.getDiscountMode()==0 && this.getDiscountPect()!=null) {
+			return new BigDecimal("100").subtract(this.getDiscountPect()).divide(new BigDecimal("100"));
+		}
+		return null;
+	}
+	
+	public BigDecimal getOriginalTotalPrice() {
+		if(isOriginalTotalPriceCached) {
+			return this.originalTotalPrice;
+		}
+		
+		if(promotionItemCombination!=null) {
+			BigDecimal totalPrice = new BigDecimal("0");
+			for(ArrayList promotionItemNode: promotionItemCombination) {
+				Item tempItem = (Item)promotionItemNode.get(0);
+				int tempQty = (int)promotionItemNode.get(1);
+				BigDecimal tempTotalPrice = tempItem.getUnitPrice().multiply(new BigDecimal(tempQty));
+				totalPrice = totalPrice.add(tempTotalPrice);
+			}
+			this.originalTotalPrice = totalPrice;
+			this.isOriginalTotalPriceCached = true;
+			return totalPrice;
+		}
+		return null;
+	}
 	public BigDecimal getPromotionPrice() {
 		switch (this.discountMode) {
 		case 0:
-			BigDecimal totalPrice = new BigDecimal("0");
-			if(promotionItemCombination!=null) {
-				for(ArrayList promotionItemNode: promotionItemCombination) {
-					Item tempItem = (Item)promotionItemNode.get(0);
-					int tempQty = (int)promotionItemNode.get(1);
-					BigDecimal tempTotalPrice = tempItem.getUnitPrice().multiply(new BigDecimal(tempQty));
-					totalPrice = totalPrice.add(tempTotalPrice);
-				}
-				return totalPrice.multiply(this.getDiscountPect().divide(new BigDecimal("100")));
+			BigDecimal totalPrice = this.getOriginalTotalPrice();
+			if(totalPrice!=null) {
+				return totalPrice.multiply(this.getDiscountPectForPriceCalculation());
 			}
 			break;
 		case 1:
@@ -111,7 +136,9 @@ public class Promotion {
 		
 		return null;
 	}
-	
+	public BigDecimal getTotalSaved() {
+		return this.getOriginalTotalPrice().subtract(this.getPromotionPrice());
+	}
 	
  	public boolean promoteValidOnThisCart(Cart cart) {
 		
