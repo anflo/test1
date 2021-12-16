@@ -102,6 +102,8 @@ class UnitTest5_Cart_Promotion_Process {
 		assertEquals(cart3.getPromotedItemQty(ItemDB.ITEM_A), 8);
 		assertEquals(cart3.getItemQuanitiy(ItemDB.ITEM_B), 1);
 		assertEquals(cart3.getPromotedItemQty(ItemDB.ITEM_B), 6);
+		
+		
 	}
 
 }
