@@ -1,5 +1,6 @@
 package cart;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import item.Item;
@@ -25,8 +26,8 @@ public class Cart {
 		this.promotionGroup = promotionGroup;
 	}
 	
-	public void updateItem(Item newItem, int newQuantity) {
-		if(promotionGroup!=null && promotionGroup.size()>0) {
+	public void updateItem(Item newItem, int newQuantity, boolean shouldDismissAllAppliedPromotionGroup) {
+		if(shouldDismissAllAppliedPromotionGroup /*&& promotionGroup!=null && promotionGroup.size()>0*/) {
 			dismissAllAppliedPromotionGroup();
 		}
 		
@@ -97,7 +98,7 @@ public class Cart {
 						int tempQty = (int)promotionItemNode.get(1);
 						int currentNonPromotedItemInCart = getNonPromotedItemQty(tempItem);
 						int newQty = currentNonPromotedItemInCart+tempQty;
-						updateItem(tempItem, newQty);
+						updateItem(tempItem, newQty, false); //prevent deadloop
 					}
 				}
 			}
@@ -147,10 +148,43 @@ public class Cart {
 
 	//calculate promotion based on the cart
 	public void applyPromotion() {
+		applyPromotion(Calendar.getInstance());
+	}
+	public void applyPromotion(Calendar processDateCalendar) {
 		if(promotionGroup!=null && promotionGroup.size()>0) {
 			dismissAllAppliedPromotionGroup(); //make sure all promotion has been removed
 		}
 		
+		CartPromotion cp = new CartPromotion();
+		ArrayList<Promotion> pList = cp.getRelatedPromotions(this, processDateCalendar);
+		if(pList!=null) {
+//			for(Promotion p: pList) {
+			for(int i=0; i<pList.size();) {
+				Promotion p = pList.get(i);
+				List<ArrayList<Object>> pItemCombination = p.getPromotionItemCombination();
+				boolean promotionCanStillApply = true;
+				for(ArrayList promotionItemNode: pItemCombination) {
+					Item pItem = (Item)promotionItemNode.get(Promotion.promotionItemNodeItemIndex);
+					int pQty = (int)promotionItemNode.get(Promotion.promotionItemNodeQtyIndex);
+					int currentItemNonPromotedQty = this.getItemQuanitiy(pItem);
+					if (currentItemNonPromotedQty<pQty) {
+						promotionCanStillApply = false;
+						i++; //if the current promotion is not applicable, move to next promotion. Otherwise, keep applying
+						break;
+					}
+				}
+				
+				if(promotionCanStillApply) {
+					for(ArrayList promotionItemNode: pItemCombination) {
+						Item pItem = (Item)promotionItemNode.get(Promotion.promotionItemNodeItemIndex);
+						int pQty = (int)promotionItemNode.get(Promotion.promotionItemNodeQtyIndex);
+						int currentItemNonPromotedQty = this.getItemQuanitiy(pItem);
+						this.updateItem(pItem, currentItemNonPromotedQty-pQty, false);
+					}
+					this.promotionGroup.add(p);
+				}
+			}
+		}
 		
 		
 	}

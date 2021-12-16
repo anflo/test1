@@ -88,13 +88,13 @@ class UnitTest3_Cart_with_Promotion {
 
 	@Test
 	void cartTestOnChangingQtyWithPromotion() {
-		cart.updateItem(a, 3); //3A in non-promotion cart
+		cart.updateItem(a, 3, false); //3A in non-promotion cart
 		assertEquals(cart.getItemQuanitiy(a), 3);
 		cart.addPromotionGroup(promotionA); //3A in non-promotion cart + 2A in promotion cart
 		assertEquals(cart.getItemQuanitiy(a), 3); //get 3 on fucntion's purpose
 		assertEquals(cart.getPromotedItemQty(a), 2); //get 2 on fucntion's purpose
 		
-		cart.updateItem(a, 7); //after update
+		cart.updateItem(a, 7, true); //dismiss promotion items
 		assertEquals(cart.getItemQuanitiy(a), 7); //updated to 7A
 		assertEquals(cart.getItemQuanitiy(b), 0); 
 		
@@ -102,7 +102,7 @@ class UnitTest3_Cart_with_Promotion {
 		assertEquals(cart.getItemQuanitiy(a), 7);
 		assertEquals(cart.getPromotedItemQty(a), 2); 
 		assertEquals(cart.getPromotedItemQty(b), 3);
-		cart.updateItem(b, 4); //all promotion should be taken off
+		cart.updateItem(b, 4, true); //dismiss promotion items all promotions
 		assertEquals(cart.getItemQuanitiy(a), 9);
 		assertEquals(cart.getItemQuanitiy(b), 4);
 		assertEquals(cart.getPromotedItemQty(a), 0); 

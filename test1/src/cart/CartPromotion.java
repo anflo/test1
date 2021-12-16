@@ -1,8 +1,12 @@
 package cart;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -162,6 +166,9 @@ public class CartPromotion {
 		promotionF.setName("F");
 		promotionList.add(promotionF);
 		//END: promotion set F
+		
+		
+		
 	}
 
 	// Below process would be a lot faster by querying from DB using all items' SKU directly.
@@ -173,6 +180,9 @@ public class CartPromotion {
 	// -----
 	// - the cart input should be taken off all promotions already
 	public ArrayList<Promotion> getRelatedPromotions(Cart cart){
+		return getRelatedPromotions(cart, Calendar.getInstance()); //current timestamp with server timezone if no datetime is provided
+	}
+	public ArrayList<Promotion> getRelatedPromotions(Cart cart, Calendar processDateCalendar){
 		ArrayList<Promotion> returnPromotionList = promotionList; //put all the promotion list in here, and then eliminate one-by-one //new ArrayList<Promotion>();
 		
 		int maxItemSetSizeOfRelatedPromotionCombination = -1;
@@ -183,6 +193,9 @@ public class CartPromotion {
 		do {
 			ArrayList<Promotion> tempNewPromotionList = new ArrayList<Promotion>();
 			for(Promotion p: returnPromotionList) {
+				if (!p.isOnPromotion(processDateCalendar)) {
+					continue;
+				}
 				List<ArrayList<Object>> pComb = p.getPromotionItemCombination();
 				if (pComb.size()>maxItemSetSizeOfRelatedPromotionCombination) maxItemSetSizeOfRelatedPromotionCombination=pComb.size(); //should just useful in the first loop
 				
@@ -204,7 +217,42 @@ public class CartPromotion {
 			promotionItemSetIndex++;
 		} while (promotionItemSetIndex<maxItemSetSizeOfRelatedPromotionCombination);
 		
+		returnPromotionList = prioritisedPromotion(returnPromotionList);
 		return returnPromotionList;
 	}
 	
+	//After calculate what promotion could be applied, it should prioritise which promotion should be applied first.
+	// The rule should be either :
+	// 	1: The one which is higher discount value goes first
+	// 	2: The one which is higher discount rate goes first
+	// For maximise benefit of customer, I would take first rule. However, below code provide rooms to switch to use rule 2.
+	// PS: Although the question said the promotions are mutually exclusive, the same Scenario B & C shows there are could have multiple promotion applied at the same time.
+	// Therefore, I would define the [mutually exclusive] means each unit of the item could be used to applied promotion once and once only. In fact, the same unit of an item is only countable for 1 promotion only.
+	// E.g. 
+	// - Promotion #1 is 2A = 10%
+	// - Cart: 3A
+	// - The promotion #1 could be only applied on the first and second A. The third is alone. 
+	// - However, if the cart has 4A, the promotion could be used twice.
+	private ArrayList<Promotion> prioritisedPromotion(ArrayList<Promotion> inputPromotionList){
+		ArrayList<Promotion> returnPromotionList = inputPromotionList;
+		Collections.sort(returnPromotionList, new SortPromotionByHighestDiscountValueComparator());
+		return returnPromotionList;
+	}
+}
+
+
+class SortPromotionByHighestDiscountValueComparator implements Comparator<Promotion> {
+    @Override
+    public int compare(Promotion p1, Promotion p2) {
+//    	System.out.println("Total Price: p1: "+p1.getOriginalTotalPrice()+", p2: "+p2.getOriginalTotalPrice());
+//    	System.out.println("Total Save: p1: "+p1.getTotalSaved()+", p2: "+p2.getTotalSaved());
+//        return p1.getTotalSaved().compareTo(p2.getTotalSaved());
+    	return p2.getTotalSaved().compareTo(p1.getTotalSaved());
+    }
+}
+class SortPromotionByHighestDiscountPectComparator implements Comparator<Promotion> {
+    @Override
+    public int compare(Promotion p1, Promotion p2) {
+        return p2.getDiscountPect().compareTo(p1.getDiscountPect());
+    }
 }
