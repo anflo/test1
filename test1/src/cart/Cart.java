@@ -26,6 +26,14 @@ public class Cart {
 		this.promotionGroup = promotionGroup;
 	}
 	
+	public void updateItem(Item newItem, int newQuantity) {
+		updateItem(newItem, newQuantity, true);
+	}
+	//shouldDismissAllAppliedPromotionGroup: should only be false when calling inside applyPromotion()
+	// The rest of time should be true.
+	// Reason: When you try to update the quantity of the cart, you should dismiss all promotions, change the qty, and then check again any new promotion could be applied for bigger save.
+	// Therefore, it should always be true.
+	// The reason of false is: applyPromotion() is used to move items from non-promoted item to promoted
 	public void updateItem(Item newItem, int newQuantity, boolean shouldDismissAllAppliedPromotionGroup) {
 		if(shouldDismissAllAppliedPromotionGroup /*&& promotionGroup!=null && promotionGroup.size()>0*/) {
 			dismissAllAppliedPromotionGroup();
@@ -152,13 +160,12 @@ public class Cart {
 	}
 	public void applyPromotion(Calendar processDateCalendar) {
 		if(promotionGroup!=null && promotionGroup.size()>0) {
-			dismissAllAppliedPromotionGroup(); //make sure all promotion has been removed
+			dismissAllAppliedPromotionGroup(); //make sure all promotion has been removed for re-calculation
 		}
 		
 		CartPromotion cp = new CartPromotion();
 		ArrayList<Promotion> pList = cp.getRelatedPromotions(this, processDateCalendar);
 		if(pList!=null) {
-//			for(Promotion p: pList) {
 			for(int i=0; i<pList.size();) {
 				Promotion p = pList.get(i);
 				List<ArrayList<Object>> pItemCombination = p.getPromotionItemCombination();

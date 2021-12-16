@@ -26,6 +26,15 @@ public class CartPromotion {
 	}
 	
 	//simulate the DB set of Promotion, should use DB calling by providing related Item.SUK to retrieve the related promotion set
+	/*
+	 * All promotions:
+	 * A: 2A = 10% off, $10 saved
+	 * B: 2A+3B = 15% off, $25.5 saved
+	 * C: 3C = 5% off, $3 saved
+	 * D: 5C = 7% off, $7 saved
+	 * E: 7C = 10% off, $14 saved
+	 * F: 3A+2B+C = 30% off, $69 saved
+	 */
 	private void initPromotionList() {
 		TimeZone timeZone = TimeZone.getTimeZone("GMT");
 		
@@ -171,6 +180,15 @@ public class CartPromotion {
 		
 	}
 
+	public Promotion getPromotionByName(String name) {
+		for(Promotion p: promotionList) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
 	// Below process would be a lot faster by querying from DB using all items' SKU directly.
 	// For e.g.: A one-to-many relationship of Promotion & PromotionItems structure. I can just
 	// gather all items' SKU, query the PromotionItems.SKU (or PromotionItems.item_id.SKU). I'll

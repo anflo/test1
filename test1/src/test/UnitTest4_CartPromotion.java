@@ -61,15 +61,6 @@ class UnitTest4_CartPromotion {
 		assertEquals(pList2.size(), 0);
 		
 		
-		/*
-		 * All promotion:
-		 * A: 2A = 10% off, $10 saved
-		 * B: 2A+3B = 15% off, $25.5 saved
-		 * C: 3C = 5% off, $3 saved
-		 * D: 5C = 7% off, $7 saved
-		 * E: 7C = 10% off, $14 saved
-		 * F: 3A+2B+C = 30% off, $69 saved
-		 */
 		Calendar processDateTime3 = Calendar.getInstance(timeZone);
 		processDateTime3.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
 		ArrayList<Promotion> pList3 = cp.getRelatedPromotions(cart3, processDateTime3);

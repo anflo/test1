@@ -38,14 +38,15 @@ class UnitTest1_Item {
 		assertEquals(cart.getItemQuanitiy(a), 3);
 		cart.updateItem(a, 7, false);
 		assertEquals(cart.getItemQuanitiy(a), 7);
-    	cart.updateItem(b, 2, false);
-    	cart.updateItem(c, 5, false);
-    	cart.updateItem(d, 15, false);
-    	assertEquals(cart.getItemQuanitiy(b), 2);
-    	assertEquals(cart.getItemQuanitiy(c), 5);
-    	assertEquals(cart.getItemQuanitiy(d), 15);
-    	cart.updateItem(c, 0, false);
-    	assertEquals(cart.getItemQuanitiy(c), 0);
+		
+		cart.updateItem(b, 2, false);
+		cart.updateItem(c, 5, false);
+		cart.updateItem(d, 15, false);
+		assertEquals(cart.getItemQuanitiy(b), 2);
+		assertEquals(cart.getItemQuanitiy(c), 5);
+		assertEquals(cart.getItemQuanitiy(d), 15);
+		cart.updateItem(c, 0, false);
+		assertEquals(cart.getItemQuanitiy(c), 0);
 	}
 
 }
