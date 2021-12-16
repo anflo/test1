@@ -162,9 +162,33 @@ class UnitTest5_Cart_Promotion_Process {
 		assertEquals(p6Group.get(1).getName(), "A");
 		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_A), 1);
 		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_A), 2);
-	
-		
-		
+		//Step 4: Add 3B into cart and take-out 1A (to be 2A in total), the Promotion-A should be taken out, and then apply Promotion-B
+		cart6.updateItem(ItemDB.ITEM_B, 3);
+		cart6.updateItem(ItemDB.ITEM_A, 2);
+		cart6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
+		p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
+		assertEquals(p6Group.size(), 2);
+		assertEquals(p6Group.get(0).getName(), "B");
+		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_A), 0);
+		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_A), 2);
+		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_B), 0);
+		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_B), 3);
+		assertEquals(p6Group.get(1).getName(), "E");
+		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_C), 1);
+		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_C), 7);
+		//Step 5: Add 1A into the cart, the promotion-B would be taken out, and apply Promotion-F 
+		cart6.updateItem(ItemDB.ITEM_A, 3);
+		cart6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
+		p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
+		assertEquals(p6Group.size(), 2);
+		assertEquals(p6Group.get(0).getName(), "F");
+		assertEquals(p6Group.get(1).getName(), "E");
+		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_A), 0);
+		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_A), 3);
+		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_B), 1);
+		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_B), 2);
+		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_C), 0);
+		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_C), 8);
 	}
 
 }

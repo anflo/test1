@@ -27,16 +27,16 @@ class UnitTest4_CartPromotion {
 		timeZone = TimeZone.getTimeZone("GMT");
 		
 		cart1 = new Cart();
-		cart1.updateItem(ItemDB.ITEM_A, 3, false);
+		cart1.updateItem(ItemDB.ITEM_A, 3);
 		
 		cart2 = new Cart();
-		cart2.updateItem(ItemDB.ITEM_A, 3, false);
-		cart2.updateItem(ItemDB.ITEM_B, 4, false);
+		cart2.updateItem(ItemDB.ITEM_A, 3);
+		cart2.updateItem(ItemDB.ITEM_B, 4);
 		
 		cart3 = new Cart();
-		cart3.updateItem(ItemDB.ITEM_A, 3, false);
-		cart3.updateItem(ItemDB.ITEM_B, 4, false);
-		cart3.updateItem(ItemDB.ITEM_C, 5, false);
+		cart3.updateItem(ItemDB.ITEM_A, 3);
+		cart3.updateItem(ItemDB.ITEM_B, 4);
+		cart3.updateItem(ItemDB.ITEM_C, 5);
 	}
 
 	@Test
