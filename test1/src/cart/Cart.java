@@ -6,6 +6,7 @@ import java.util.List;
 
 import item.Item;
 import item.promotion.Promotion;
+import item.promotion.PromotionItem;
 
 public class Cart {
 
@@ -70,11 +71,11 @@ public class Cart {
 			this.promotionGroup = new ArrayList<Promotion>(); //reset the promotion group to prevent deadloop when call updateItem() below 
 
 			for(Promotion p: tempPromotionGroup) {
-				List<ArrayList<Object>> promotionCombination = p.getPromotionItemCombination();
+				List<PromotionItem> promotionCombination = p.getPromotionItemCombination();
 				if (promotionCombination!=null) {
-					for(ArrayList<Object> promotionItemNode: promotionCombination) {
-						Item tempItem = (Item)promotionItemNode.get(0);
-						int tempQty = (int)promotionItemNode.get(1);
+					for(PromotionItem promotionItemNode: promotionCombination) {
+						Item tempItem = promotionItemNode.getItem();
+						int tempQty = promotionItemNode.getQuantity();
 						int currentNonPromotedItemInCart = getNonPromotedItemQty(tempItem);
 						int newQty = currentNonPromotedItemInCart+tempQty;
 						updateItem(tempItem, newQty, false); //prevent deadloop
@@ -102,11 +103,11 @@ public class Cart {
 			List<Promotion> tempPromotionGroup = this.promotionGroup;
 			
 			for(Promotion p: tempPromotionGroup) {
-				List<ArrayList<Object>> promotionCombination = p.getPromotionItemCombination();
+				List<PromotionItem> promotionCombination = p.getPromotionItemCombination();
 				if (promotionCombination!=null) {
-					for(ArrayList<Object> promotionItemNode: promotionCombination) {
-						Item tempItem = (Item)promotionItemNode.get(0);
-						int tempQty = (int)promotionItemNode.get(1);
+					for(PromotionItem promotionItemNode: promotionCombination) {
+						Item tempItem = promotionItemNode.getItem();
+						int tempQty = promotionItemNode.getQuantity();
 						if (tempItem.getSku().equals(item.getSku())){
 							totalQty += tempQty;
 						}
@@ -136,11 +137,11 @@ public class Cart {
 		if(pList!=null) {
 			for(int i=0; i<pList.size();) {
 				Promotion p = pList.get(i);
-				List<ArrayList<Object>> pItemCombination = p.getPromotionItemCombination();
+				List<PromotionItem> pItemCombination = p.getPromotionItemCombination();
 				boolean promotionCanStillApply = true;
-				for(ArrayList promotionItemNode: pItemCombination) {
-					Item pItem = (Item)promotionItemNode.get(Promotion.promotionItemNodeItemIndex);
-					int pQty = (int)promotionItemNode.get(Promotion.promotionItemNodeQtyIndex);
+				for(PromotionItem promotionItemNode: pItemCombination) {
+					Item pItem = promotionItemNode.getItem();
+					int pQty = promotionItemNode.getQuantity();
 					int currentItemNonPromotedQty = this.getItemQuanitiy(pItem);
 					if (currentItemNonPromotedQty<pQty) {
 						promotionCanStillApply = false;
@@ -150,9 +151,9 @@ public class Cart {
 				}
 				
 				if(promotionCanStillApply) {
-					for(ArrayList promotionItemNode: pItemCombination) {
-						Item pItem = (Item)promotionItemNode.get(Promotion.promotionItemNodeItemIndex);
-						int pQty = (int)promotionItemNode.get(Promotion.promotionItemNodeQtyIndex);
+					for(PromotionItem promotionItemNode: pItemCombination) {
+						Item pItem = promotionItemNode.getItem();
+						int pQty = promotionItemNode.getQuantity();
 						int currentItemNonPromotedQty = this.getItemQuanitiy(pItem);
 						this.updateItem(pItem, currentItemNonPromotedQty-pQty, false);
 					}

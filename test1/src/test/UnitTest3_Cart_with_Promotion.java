@@ -17,6 +17,7 @@ import item.Item;
 import item.ItemDB;
 import item.promotion.DiscountMode;
 import item.promotion.Promotion;
+import item.promotion.PromotionItem;
 
 class UnitTest3_Cart_with_Promotion {
 	protected Item a;
@@ -47,11 +48,9 @@ class UnitTest3_Cart_with_Promotion {
 		Calendar promotionAEndDateTime = Calendar.getInstance(timeZone);
 		promotionAEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionAItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp1AList = new ArrayList();
-		temp1AList.add(a);
-		temp1AList.add(2); //2 items for A
-		promotionAItemCombination.add(temp1AList);
+		List<PromotionItem> promotionAItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p1A = new PromotionItem(a, 2);
+		promotionAItemCombination.add(p1A);
 		
 		DiscountMode promotionADiscountType = DiscountMode.DiscountPect; //pect
 		promotionADiscountPect = new BigDecimal("10"); //10% off
@@ -66,16 +65,11 @@ class UnitTest3_Cart_with_Promotion {
 		Calendar promotionBEndDateTime = Calendar.getInstance(timeZone);
 		promotionBEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionBItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp2AList = new ArrayList();
-		temp2AList.add(a);
-		temp2AList.add(2); //2 items for A
-		promotionBItemCombination.add(temp2AList);
-		
-		ArrayList temp2BList = new ArrayList();
-		temp2BList.add(b);
-		temp2BList.add(3); //3 items for B
-		promotionBItemCombination.add(temp2BList);
+		List<PromotionItem> promotionBItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p2A = new PromotionItem(a, 2);
+		PromotionItem p2B = new PromotionItem(b, 3);
+		promotionBItemCombination.add(p2A);
+		promotionBItemCombination.add(p2B);
 		
 		DiscountMode promotionBDiscountType = DiscountMode.DiscountPect; //pect
 		promotionBDiscountPect = new BigDecimal("15"); //15% off

@@ -14,6 +14,7 @@ import item.Item;
 import item.ItemDB;
 import item.promotion.DiscountMode;
 import item.promotion.Promotion;
+import item.promotion.PromotionItem;
 
 //used to calculate all potential promotion based on the inputted cart
 public class CartPromotion {
@@ -45,11 +46,9 @@ public class CartPromotion {
 		Calendar promotionAEndDateTime = Calendar.getInstance(timeZone);
 		promotionAEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionAItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp1AList = new ArrayList();
-		temp1AList.add(ItemDB.ITEM_A);
-		temp1AList.add(2); //2 items for A
-		promotionAItemCombination.add(temp1AList);
+		List<PromotionItem> promotionAItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p1A = new PromotionItem(ItemDB.ITEM_A, 2); //2 items for A
+		promotionAItemCombination.add(p1A);
 		
 		DiscountMode promotionADiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionADiscountPect = new BigDecimal("10"); //10% off
@@ -65,16 +64,11 @@ public class CartPromotion {
 		Calendar promotionBEndDateTime = Calendar.getInstance(timeZone);
 		promotionBEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionBItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp2AList = new ArrayList();
-		temp2AList.add(ItemDB.ITEM_A);
-		temp2AList.add(2); //2 items for A
-		promotionBItemCombination.add(temp2AList);
-		
-		ArrayList temp2BList = new ArrayList();
-		temp2BList.add(ItemDB.ITEM_B);
-		temp2BList.add(3); //3 items for B
-		promotionBItemCombination.add(temp2BList);
+		List<PromotionItem> promotionBItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p2A = new PromotionItem(ItemDB.ITEM_A, 2); //2 items for A	
+		PromotionItem p2B = new PromotionItem(ItemDB.ITEM_B, 3); //3 items for B
+		promotionBItemCombination.add(p2A);
+		promotionBItemCombination.add(p2B);
 		
 		DiscountMode promotionBDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionBDiscountPect = new BigDecimal("15"); //15% off
@@ -91,11 +85,9 @@ public class CartPromotion {
 		Calendar promotionCEndDateTime = Calendar.getInstance(timeZone);
 		promotionCEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionCItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp3AList = new ArrayList();
-		temp3AList.add(ItemDB.ITEM_C);
-		temp3AList.add(3); //3 items for C
-		promotionCItemCombination.add(temp3AList);
+		List<PromotionItem> promotionCItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p3C = new PromotionItem(ItemDB.ITEM_C, 3);
+		promotionCItemCombination.add(p3C);
 		
 		DiscountMode promotionCDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionCDiscountPect = new BigDecimal("5"); //5% off
@@ -111,11 +103,9 @@ public class CartPromotion {
 		Calendar promotionDEndDateTime = Calendar.getInstance(timeZone);
 		promotionDEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionDItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp4AList = new ArrayList();
-		temp4AList.add(ItemDB.ITEM_C);
-		temp4AList.add(5); //5 items for C
-		promotionDItemCombination.add(temp4AList);
+		List<PromotionItem> promotionDItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p5C = new PromotionItem(ItemDB.ITEM_C, 5);
+		promotionDItemCombination.add(p5C);
 		
 		DiscountMode promotionDDiscountType = DiscountMode.DiscountPect; //pect
 		BigDecimal promotionDDiscountPect = new BigDecimal("7"); //7% off
@@ -130,11 +120,9 @@ public class CartPromotion {
 		Calendar promotionEEndDateTime = Calendar.getInstance(timeZone);
 		promotionEEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionEItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp5AList = new ArrayList();
-		temp5AList.add(ItemDB.ITEM_C);
-		temp5AList.add(7); //7 items for C
-		promotionEItemCombination.add(temp5AList);
+		List<PromotionItem> promotionEItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p6C = new PromotionItem(ItemDB.ITEM_C, 7);
+		promotionEItemCombination.add(p6C);
 		
 		DiscountMode promotionEDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionEDiscountPect = new BigDecimal("10"); //10% off
@@ -150,21 +138,13 @@ public class CartPromotion {
 		Calendar promotionFEndDateTime = Calendar.getInstance(timeZone);
 		promotionFEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
-		List<ArrayList<Object>> promotionFItemCombination = new ArrayList<ArrayList<Object>>();
-		ArrayList temp6AList = new ArrayList();
-		temp6AList.add(ItemDB.ITEM_A);
-		temp6AList.add(3); //3 items for A
-		promotionFItemCombination.add(temp6AList);
-		
-		ArrayList temp6BList = new ArrayList();
-		temp6BList.add(ItemDB.ITEM_B);
-		temp6BList.add(2); //2 items for B
-		promotionFItemCombination.add(temp6BList);
-		
-		ArrayList temp6CList = new ArrayList();
-		temp6CList.add(ItemDB.ITEM_C);
-		temp6CList.add(1); //1 item for C
-		promotionFItemCombination.add(temp6CList);
+		List<PromotionItem> promotionFItemCombination = new ArrayList<PromotionItem>();
+		PromotionItem p7A = new PromotionItem(ItemDB.ITEM_A, 3);
+		PromotionItem p7B = new PromotionItem(ItemDB.ITEM_B, 2);
+		PromotionItem p7C = new PromotionItem(ItemDB.ITEM_C, 1);
+		promotionFItemCombination.add(p7A);
+		promotionFItemCombination.add(p7B);
+		promotionFItemCombination.add(p7C);
 		
 		DiscountMode promotionFDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionFDiscountPect = new BigDecimal("30"); //30% off
@@ -211,7 +191,7 @@ public class CartPromotion {
 				if (!p.isOnPromotion(processDateCalendar)) {
 					continue;
 				}
-				List<ArrayList<Object>> pComb = p.getPromotionItemCombination();
+				List<PromotionItem> pComb = p.getPromotionItemCombination();
 				if (pComb.size()>maxItemSetSizeOfRelatedPromotionCombination) maxItemSetSizeOfRelatedPromotionCombination=pComb.size(); //should just useful in the first loop
 				
 				if (pComb.size()-1<promotionItemSetIndex) {
@@ -219,9 +199,9 @@ public class CartPromotion {
 					continue;
 				}
 				
-				ArrayList<Object> promotionItemNode = pComb.get(promotionItemSetIndex);
-				Item pItem = (Item)promotionItemNode.get(Promotion.promotionItemNodeItemIndex);
-				int pQty = (int)promotionItemNode.get(Promotion.promotionItemNodeQtyIndex);
+				PromotionItem promotionItemNode = pComb.get(promotionItemSetIndex);
+				Item pItem = promotionItemNode.getItem();
+				int pQty = promotionItemNode.getQuantity();
 				
 				int qtyInCart = cart.getItemQuanitiy(pItem);
 				if (qtyInCart>=pQty) {

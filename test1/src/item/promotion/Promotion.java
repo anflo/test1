@@ -20,9 +20,9 @@ public class Promotion {
 
 	private Calendar promotionStartDateTime;
 	private Calendar promotionEndDateTime;
-	private List<ArrayList<Object>> promotionItemCombination; //for each node, 0=Item, 1=quantity required
-	public static final int promotionItemNodeItemIndex = 0;
-	public static final int promotionItemNodeQtyIndex = 1;
+	private List<PromotionItem> promotionItemCombination; //for each node, 0=Item, 1=quantity required
+//	public static final int promotionItemNodeItemIndex = 0;
+//	public static final int promotionItemNodeQtyIndex = 1;
 	private DiscountMode discountMode;
 	private BigDecimal discountPect; //how many % off from original price, should be between 1-100 only
 	private BigDecimal discountedPrice;
@@ -32,7 +32,7 @@ public class Promotion {
 //	private BigDecimal calculatedDiscountPrice;
 //	private BigDecimal calculatedTotalSaved; //wont do this since the calculation is simple already.
 	
- 	public Promotion(Calendar promotionStartDateTime, Calendar promotionEndDateTime, List<ArrayList<Object>> promotionItemCombination, DiscountMode discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
+ 	public Promotion(Calendar promotionStartDateTime, Calendar promotionEndDateTime, List<PromotionItem> promotionItemCombination, DiscountMode discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
 		super();
 		this.name = "";
 		this.promotionStartDateTime = promotionStartDateTime;
@@ -77,7 +77,7 @@ public class Promotion {
 	}
 
 
-	public List<ArrayList<Object>> getPromotionItemCombination() {
+	public List<PromotionItem> getPromotionItemCombination() {
 		return promotionItemCombination;
 	}
 	/* 
@@ -114,9 +114,9 @@ public class Promotion {
 		
 		if(promotionItemCombination!=null) {
 			BigDecimal totalPrice = new BigDecimal("0");
-			for(ArrayList promotionItemNode: promotionItemCombination) {
-				Item tempItem = (Item)promotionItemNode.get(promotionItemNodeItemIndex);
-				int tempQty = (int)promotionItemNode.get(promotionItemNodeQtyIndex);
+			for(PromotionItem promotionItemNode: promotionItemCombination) {
+				Item tempItem = promotionItemNode.getItem();
+				int tempQty = promotionItemNode.getQuantity();
 				BigDecimal tempTotalPrice = tempItem.getUnitPrice().multiply(new BigDecimal(tempQty));
 				totalPrice = totalPrice.add(tempTotalPrice);
 			}
