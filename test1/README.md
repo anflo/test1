@@ -10,7 +10,7 @@ As a data set of items
 Promotion object contains the start/end date time of the promotion (with TimeZone), which item(s) and its quantity will be required to fulfill this promotion, and the discount price / percentage of this promotion.
 
 ### CartPromotion
-Object to calculate which promotion could be applied by providing a shopping cart. It would be easier and faster if a relation DB would be applied (one-to-many relationship of Promotion & PromotionItem). In fact, just query the PromotionItem by all item's id (name, in this case) and you will find out all the related Promotion already. However, there is no DB in time question.
+Object to calculate which promotion could be applied by providing a shopping cart. It would be easier and faster if a relational DB would be applied (one-to-many relationship of Promotion & PromotionItem). In fact, just query the PromotionItem by all item's id (name, in this case) and you will find out all the related Promotion already. However, there is no DB in time question.
 
 This object stores several different kind of promotions as a DB. An algorithm has been applied on the selection to speed up if there are thousands of promotions and hundreds of items in the cart, which would would be explained in later section.
 
