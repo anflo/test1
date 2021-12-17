@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import item.Item;
 import item.promotion.Promotion;
@@ -16,9 +15,6 @@ public class Cart {
 	//myCart stores for non-promotion items only
 	public final static int cartItemItemIndex = 0;
 	public final static int cartItemQtyIndex = 1;
-//	public List<ArrayList<Object>> getMyCart(){
-//		return this.myCart;
-//	}
 	public HashMap<String, ArrayList<Object>> getMyCart() {
 		return myCart;
 	}
@@ -45,33 +41,6 @@ public class Cart {
 			dismissAllAppliedPromotionGroup();
 		}
 		
-		/*
-		if (this.myCart==null || this.myCart.size()<=0) {
-//			myCart = new ArrayList<ArrayList<Object>>();
-			myCart = new HashMap<String, ArrayList<Object>>();
-			addItemToCart(newItem, newQuantity);
-			
-		} else {
-			for(int i=0; i<this.myCart.size(); i++) {
-				ArrayList tempItemNode = (ArrayList)this.myCart.get(i);
-				Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
-				int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
-				if (tempItem.getSku().equals(newItem.getSku())) {
-					if (newQuantity<=0) {
-						this.myCart.remove(i);
-						//TO-DO 
-					} else {
-						tempItemNode.set(cartItemQtyIndex, newQuantity);
-						this.myCart.set(i, tempItemNode);
-					}
-					return;
-				}
-			}
-			
-			//loop all existing item and cant find the new one, insert at the end
-			addItemToCart(newItem, newQuantity);
-		}
-		*/
 		if (newItem!=null && newItem.getSku()!=null && newItem.getSku().length()>0 &&
 			newQuantity>0
 		) {
@@ -83,27 +52,9 @@ public class Cart {
 			myCart.remove(newItem.getSku());
 		}
 	}
-	/*
-	private void addItemToCart(Item newItem, int newQuantity) {
-		ArrayList newItemNode = new ArrayList<Object>();
-		newItemNode.add(newItem);
-		newItemNode.add(newQuantity);
-		//myCart.add(newItemNode);
-		myCart.put(newItem.getSku(), newItemNode);
-	}
-	*/
 
 	//item non-promoted qty
 	public int getItemQuanitiy(Item newItem) {
-//		if (this.myCart!=null && this.myCart.size()>0) {
-//			for(int i=0; i<this.myCart.size(); i++) {
-//				ArrayList tempItemNode = (ArrayList)this.myCart.get(i);
-//				Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
-//				if (tempItem.getSku().equals(newItem.getSku())) {
-//					return (int)tempItemNode.get(cartItemQtyIndex);
-//				}
-//			}
-//		}
 		if (newItem!=null && newItem.getSku()!=null && newItem.getSku().length()>0 &&
 			myCart!=null && myCart.size()>0 && myCart.containsKey(newItem.getSku())
 		) {
@@ -127,8 +78,7 @@ public class Cart {
 		if(promotionGroup!=null) {
 			List<Promotion> tempPromotionGroup = this.promotionGroup;
 			this.promotionGroup = new ArrayList<Promotion>(); //reset the promotion group to prevent deadloop when call updateItem() below 
-			
-			
+
 			for(Promotion p: tempPromotionGroup) {
 				List<ArrayList<Object>> promotionCombination = p.getPromotionItemCombination();
 				if (promotionCombination!=null) {
@@ -149,14 +99,6 @@ public class Cart {
 		if (item!=null && item.getSku()!=null && item.getSku().length()>0 && 
 			this.myCart.size()>0 && this.myCart.containsKey(item.getSku())
 		) {
-//			for(int i=0; i<this.myCart.size(); i++) {
-//				ArrayList tempItemNode = (ArrayList)this.myCart.get(i);
-//				Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
-//				int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
-//				if (tempItem.getSku().equals(item.getSku())) {
-//					return tempItemQty;
-//				}
-//			}
 			ArrayList<Object> tempItemNode = (ArrayList<Object>)this.myCart.get(item.getSku());
 //			Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
 			int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
@@ -239,14 +181,8 @@ public class Cart {
 		return "Cart [myCart=" + myCart + ", promotionGroup=" + promotionGroup + "]";
 	}
 	public Cart() {
-//		this(new ArrayList<ArrayList<Object>>(), new ArrayList<Promotion>());
 		this(new HashMap<String, ArrayList<Object>>(), new ArrayList<Promotion>());
 	}
-//	public Cart(List<ArrayList<Object>> myCart, List<Promotion> promotionGroup) {
-//		super();
-//		this.myCart = myCart;
-//		this.promotionGroup = promotionGroup;
-//	}
 	public Cart(HashMap<String, ArrayList<Object>> myCart, List<Promotion> promotionGroup) {
 		super();
 		this.myCart = myCart;
