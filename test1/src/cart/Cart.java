@@ -9,14 +9,10 @@ import item.promotion.Promotion;
 
 public class Cart {
 
-	private HashMap<String, ArrayList<Object>> myCart; //each node, 0=item, 1=qty
-	//myCart stores for non-promotion items only
-	public final static int cartItemItemIndex = 0;
-	public final static int cartItemQtyIndex = 1;
-	public HashMap<String, ArrayList<Object>> getMyCart() {
+	private HashMap<String, CartItem> myCart;
+	public HashMap<String, CartItem> getMyCart() {
 		return myCart;
 	}
-	
 	
 	private List<Promotion> promotionGroup = new ArrayList<Promotion>();
 	public List<Promotion> getPromotionGroup() {
@@ -42,10 +38,8 @@ public class Cart {
 		if (newItem!=null && newItem.getSku()!=null && newItem.getSku().length()>0 &&
 			newQuantity>0
 		) {
-			ArrayList newItemNode = new ArrayList<Object>();
-			newItemNode.add(newItem);
-			newItemNode.add(newQuantity);
-			myCart.put(newItem.getSku(), newItemNode);
+			CartItem cartItem = new CartItem(newItem, newQuantity);
+			myCart.put(newItem.getSku(), cartItem);
 		} else if (newQuantity<=0) {
 			myCart.remove(newItem.getSku());
 		}
@@ -56,10 +50,8 @@ public class Cart {
 		if (newItem!=null && newItem.getSku()!=null && newItem.getSku().length()>0 &&
 			myCart!=null && myCart.size()>0 && myCart.containsKey(newItem.getSku())
 		) {
-			ArrayList<Object> tempItemNode = myCart.get(newItem.getSku());
-			Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
-			int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
-			return tempItemQty;
+			CartItem cartItem = myCart.get(newItem.getSku());
+			return cartItem.getQuantity();
 		}
 		
 		return 0; //can choose to return -1 to represent item not existing, but this is not important yet 
@@ -97,11 +89,9 @@ public class Cart {
 		if (item!=null && item.getSku()!=null && item.getSku().length()>0 && 
 			this.myCart.size()>0 && this.myCart.containsKey(item.getSku())
 		) {
-			ArrayList<Object> tempItemNode = (ArrayList<Object>)this.myCart.get(item.getSku());
-//			Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
-			int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
+			CartItem tempItem = this.myCart.get(item.getSku());
+			int tempItemQty = tempItem.getQuantity();
 			return tempItemQty;
-
 		}
 		return 0;
 	}
@@ -179,9 +169,9 @@ public class Cart {
 		return "Cart [myCart=" + myCart + ", promotionGroup=" + promotionGroup + "]";
 	}
 	public Cart() {
-		this(new HashMap<String, ArrayList<Object>>(), new ArrayList<Promotion>());
+		this(new HashMap<String, CartItem>(), new ArrayList<Promotion>());
 	}
-	public Cart(HashMap<String, ArrayList<Object>> myCart, List<Promotion> promotionGroup) {
+	public Cart(HashMap<String, CartItem> myCart, List<Promotion> promotionGroup) {
 		super();
 		this.myCart = myCart;
 		this.promotionGroup = promotionGroup;
