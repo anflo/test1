@@ -22,6 +22,9 @@ public class Cart {
 	public void setPromotionGroup(List<Promotion> promotionGroup) {
 		this.promotionGroup = promotionGroup;
 	}
+	public void addPromotion(Promotion promotionGroup) {
+		this.promotionGroup.add(promotionGroup);
+	}
 	
 	public void updateItem(Item newItem, int newQuantity) {
 		updateItem(newItem, newQuantity, true);
@@ -65,7 +68,7 @@ public class Cart {
 	// 3. 7A = 20% off
 	// The change of its quantity might change of the promotion applied. 
 	// Therefore, recalculate is the best
-	private void dismissAllAppliedPromotionGroup() {
+	public void dismissAllAppliedPromotionGroup() {
 		if(promotionGroup!=null) {
 			List<Promotion> tempPromotionGroup = this.promotionGroup;
 			this.promotionGroup = new ArrayList<Promotion>(); //reset the promotion group to prevent deadloop when call updateItem() below 
@@ -123,6 +126,7 @@ public class Cart {
 		promotionGroup.add(p);
 	}
 
+	/*
 	//calculate promotion based on the cart
 	public void applyPromotion() {
 		applyPromotion(Calendar.getInstance());
@@ -164,7 +168,7 @@ public class Cart {
 		
 		
 	}
-	
+	*/
 	@Override
 	public String toString() {
 		return "Cart [myCart=" + myCart + ", promotionGroup=" + promotionGroup + "]";

@@ -14,6 +14,7 @@ import cart.Cart;
 import cart.CartPromotion;
 import item.ItemDB;
 import item.promotion.Promotion;
+import item.promotion.process.PromotionProcess;
 
 class UnitTest5_Cart_Promotion_Process {
 
@@ -58,14 +59,15 @@ class UnitTest5_Cart_Promotion_Process {
 		// promotion should be applied: A
 		Calendar processDateTime1 = Calendar.getInstance(timeZone);
 		processDateTime1.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
-		cart1.applyPromotion(processDateTime1);
+		PromotionProcess pc1 = new PromotionProcess(cart1);
+		cart1 = pc1.applyPromotion(processDateTime1);
 		ArrayList<Promotion> p1Group = (ArrayList<Promotion>) cart1.getPromotionGroup();
 		assertEquals(p1Group.size(), 1);
 		assertEquals(p1Group.get(0).getName(), "A");
 		assertEquals(cart1.getItemQuanitiy(ItemDB.ITEM_A), 1);
 		assertEquals(cart1.getPromotedItemQty(ItemDB.ITEM_A), 2);
 		processDateTime1.set(2022, 11, 25, 0, 0); //2022-dec-25 0:00am
-		cart1.applyPromotion(processDateTime1);
+		cart1 = pc1.applyPromotion(processDateTime1);
 		p1Group = (ArrayList<Promotion>) cart1.getPromotionGroup();
 		assertEquals(p1Group.size(), 0);
 		assertEquals(cart1.getItemQuanitiy(ItemDB.ITEM_A), 3);
@@ -75,7 +77,8 @@ class UnitTest5_Cart_Promotion_Process {
 		// promotion should be applied: B 
 		Calendar processDateTime2 = Calendar.getInstance(timeZone);
 		processDateTime2.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
-		cart2.applyPromotion(processDateTime2);
+		PromotionProcess pc2 = new PromotionProcess(cart2);
+		cart2 = pc2.applyPromotion(processDateTime2);
 		ArrayList<Promotion> p2Group = (ArrayList<Promotion>) cart2.getPromotionGroup();
 		assertEquals(p2Group.size(), 1);
 		assertEquals(p2Group.get(0).getName(), "B");
@@ -89,7 +92,8 @@ class UnitTest5_Cart_Promotion_Process {
 		// promotion should be applied: B x 2 + A x 2
 		Calendar processDateTime3 = Calendar.getInstance(timeZone);
 		processDateTime3.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
-		cart3.applyPromotion(processDateTime3);
+		PromotionProcess pc3 = new PromotionProcess(cart3);
+		cart3 = pc3.applyPromotion(processDateTime3);
 		ArrayList<Promotion> p3Group = (ArrayList<Promotion>) cart3.getPromotionGroup();
 		assertEquals(p3Group.size(), 4);
 		assertEquals(p3Group.get(0).getName(), "B");
@@ -106,7 +110,8 @@ class UnitTest5_Cart_Promotion_Process {
 		// promotion should be applied: F + E + C
 		Calendar processDateTime4 = Calendar.getInstance(timeZone);
 		processDateTime4.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
-		cart4.applyPromotion(processDateTime4);
+		PromotionProcess pc4 = new PromotionProcess(cart4);
+		cart4 = pc4.applyPromotion(processDateTime4);
 		ArrayList<Promotion> p4Group = (ArrayList<Promotion>) cart4.getPromotionGroup();
 		assertEquals(p4Group.size(), 3);
 		assertEquals(p4Group.get(0).getName(), "F");
@@ -124,7 +129,8 @@ class UnitTest5_Cart_Promotion_Process {
 		// promotion should be applied: E , not C+D
 		Calendar processDateTime5 = Calendar.getInstance(timeZone);
 		processDateTime5.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
-		cart5.applyPromotion(processDateTime5);
+		PromotionProcess pc5 = new PromotionProcess(cart5);
+		cart5 = pc5.applyPromotion(processDateTime5);
 		ArrayList<Promotion> p5Group = (ArrayList<Promotion>) cart5.getPromotionGroup();
 		assertEquals(p5Group.size(), 1);
 		assertEquals(p5Group.get(0).getName(), "E");
@@ -137,7 +143,8 @@ class UnitTest5_Cart_Promotion_Process {
 		processDateTime6.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
 		//Step 1: add Promotion-C into cart
 		cart6.addPromotionGroup(cp.getPromotionByName("C"));
-		cart6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
+		PromotionProcess pc6 = new PromotionProcess(cart6);
+		cart6 = pc6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
 		ArrayList<Promotion> p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
 		assertEquals(p6Group.size(), 1);
 		assertEquals(p6Group.get(0).getName(), "C");
@@ -145,7 +152,7 @@ class UnitTest5_Cart_Promotion_Process {
 		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_C), 3);
 		//Step 2: add Promotion-D into cart, and then since there would be 8C, it should be turning into Promotion-E, and remains 1C in non-promotion item cart
 		cart6.addPromotionGroup(cp.getPromotionByName("D"));
-		cart6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
+		cart6 = pc6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
 		p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
 		assertEquals(p6Group.size(), 1);
 		assertEquals(p6Group.get(0).getName(), "E");
@@ -153,7 +160,7 @@ class UnitTest5_Cart_Promotion_Process {
 		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_C), 7);
 		//Step 3: Add 3A into cart , 2 of the A should apply Promotion-A
 		cart6.updateItem(ItemDB.ITEM_A, 3);
-		cart6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
+		cart6 = pc6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
 		p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
 		assertEquals(p6Group.size(), 2);
 		assertEquals(p6Group.get(0).getName(), "E");
@@ -165,7 +172,7 @@ class UnitTest5_Cart_Promotion_Process {
 		//Step 4: Add 3B into cart and take-out 1A (to be 2A in total), the Promotion-A should be taken out, and then apply Promotion-B
 		cart6.updateItem(ItemDB.ITEM_B, 3);
 		cart6.updateItem(ItemDB.ITEM_A, 2);
-		cart6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
+		cart6 = pc6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
 		p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
 		assertEquals(p6Group.size(), 2);
 		assertEquals(p6Group.get(0).getName(), "B");
@@ -178,7 +185,7 @@ class UnitTest5_Cart_Promotion_Process {
 		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_C), 7);
 		//Step 5: Add 1A into the cart, the promotion-B would be taken out, and apply Promotion-F 
 		cart6.updateItem(ItemDB.ITEM_A, 3);
-		cart6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
+		cart6 = pc6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
 		p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
 		assertEquals(p6Group.size(), 2);
 		assertEquals(p6Group.get(0).getName(), "F");
