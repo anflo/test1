@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import item.Item;
 import item.ItemDB;
+import item.promotion.DiscountMode;
 import item.promotion.Promotion;
 
 class UnitTest2_Promotion {
@@ -50,9 +51,8 @@ class UnitTest2_Promotion {
 		temp1AList.add(2); //2 items for A
 		promotionAItemCombination.add(temp1AList);
 		
-		int promotionADiscountType = 0; //pect
+		DiscountMode promotionADiscountType = DiscountMode.DiscountPect; //pect
 		promotionADiscountPect = new BigDecimal("10"); //10% off
-		
 		promotionA = new Promotion(promotionAStartDateTime, promotionAEndDateTime, promotionAItemCombination, promotionADiscountType, promotionADiscountPect, null);
 		//END: promotion set A
 		
@@ -74,9 +74,8 @@ class UnitTest2_Promotion {
 		temp2BList.add(3); //3 items for B
 		promotionBItemCombination.add(temp2BList);
 		
-		int promotionBDiscountType = 0; //pect
+		DiscountMode promotionBDiscountType = DiscountMode.DiscountPect; //pect
 		promotionBDiscountPect = new BigDecimal("15"); //15% off
-		
 		promotionB = new Promotion(promotionBStartDateTime, promotionBEndDateTime, promotionBItemCombination, promotionBDiscountType, promotionBDiscountPect, null);
 		//END: promotion set B
 	}

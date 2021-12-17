@@ -12,6 +12,7 @@ import java.util.TimeZone;
 
 import item.Item;
 import item.ItemDB;
+import item.promotion.DiscountMode;
 import item.promotion.Promotion;
 
 //used to calculate all potential promotion based on the inputted cart
@@ -50,7 +51,7 @@ public class CartPromotion {
 		temp1AList.add(2); //2 items for A
 		promotionAItemCombination.add(temp1AList);
 		
-		int promotionADiscountType = 0; //pect
+		DiscountMode promotionADiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionADiscountPect = new BigDecimal("10"); //10% off
 		Promotion promotionA = new Promotion(promotionAStartDateTime, promotionAEndDateTime, promotionAItemCombination, promotionADiscountType, promotionADiscountPect, null);
 		promotionA.setName("A");
@@ -75,7 +76,7 @@ public class CartPromotion {
 		temp2BList.add(3); //3 items for B
 		promotionBItemCombination.add(temp2BList);
 		
-		int promotionBDiscountType = 0; //pect
+		DiscountMode promotionBDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionBDiscountPect = new BigDecimal("15"); //15% off
 		
 		Promotion promotionB = new Promotion(promotionBStartDateTime, promotionBEndDateTime, promotionBItemCombination, promotionBDiscountType, promotionBDiscountPect, null);
@@ -96,9 +97,8 @@ public class CartPromotion {
 		temp3AList.add(3); //3 items for C
 		promotionCItemCombination.add(temp3AList);
 		
-		int promotionCDiscountType = 0; //pect
+		DiscountMode promotionCDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionCDiscountPect = new BigDecimal("5"); //5% off
-		
 		Promotion promotionC = new Promotion(promotionCStartDateTime, promotionCEndDateTime, promotionCItemCombination, promotionCDiscountType, promotionCDiscountPect, null);
 		promotionC.setName("C");
 		promotionList.add(promotionC);
@@ -117,9 +117,8 @@ public class CartPromotion {
 		temp4AList.add(5); //5 items for C
 		promotionDItemCombination.add(temp4AList);
 		
-		int promotionDDiscountType = 0; //pect
+		DiscountMode promotionDDiscountType = DiscountMode.DiscountPect; //pect
 		BigDecimal promotionDDiscountPect = new BigDecimal("7"); //7% off
-		
 		Promotion promotionD = new Promotion(promotionDStartDateTime, promotionDEndDateTime, promotionDItemCombination, promotionDDiscountType, promotionDDiscountPect, null);
 		promotionD.setName("D");
 		promotionList.add(promotionD);
@@ -137,9 +136,8 @@ public class CartPromotion {
 		temp5AList.add(7); //7 items for C
 		promotionEItemCombination.add(temp5AList);
 		
-		int promotionEDiscountType = 0; //pect
+		DiscountMode promotionEDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionEDiscountPect = new BigDecimal("10"); //10% off
-		
 		Promotion promotionE = new Promotion(promotionEStartDateTime, promotionEEndDateTime, promotionEItemCombination, promotionEDiscountType, promotionEDiscountPect, null);
 		promotionE.setName("E");
 		promotionList.add(promotionE);
@@ -168,9 +166,8 @@ public class CartPromotion {
 		temp6CList.add(1); //1 item for C
 		promotionFItemCombination.add(temp6CList);
 		
-		int promotionFDiscountType = 0; //pect
+		DiscountMode promotionFDiscountType = DiscountMode.DiscountPect;
 		BigDecimal promotionFDiscountPect = new BigDecimal("30"); //30% off
-		
 		Promotion promotionF = new Promotion(promotionFStartDateTime, promotionFEndDateTime, promotionFItemCombination, promotionFDiscountType, promotionFDiscountPect, null);
 		promotionF.setName("F");
 		promotionList.add(promotionF);

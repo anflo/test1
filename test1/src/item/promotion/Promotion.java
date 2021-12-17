@@ -6,6 +6,8 @@ import java.util.List;
 
 import item.Item;
 
+
+
 public class Promotion {
 
 	private String name; //assume this name is only useful for unit test (to identity)
@@ -21,7 +23,7 @@ public class Promotion {
 	private List<ArrayList<Object>> promotionItemCombination; //for each node, 0=Item, 1=quantity required
 	public static final int promotionItemNodeItemIndex = 0;
 	public static final int promotionItemNodeQtyIndex = 1;
-	private int discountMode; //0= percentage, 1= direct discount price
+	private DiscountMode discountMode;
 	private BigDecimal discountPect; //how many % off from original price, should be between 1-100 only
 	private BigDecimal discountedPrice;
 	
@@ -30,7 +32,7 @@ public class Promotion {
 //	private BigDecimal calculatedDiscountPrice;
 //	private BigDecimal calculatedTotalSaved; //wont do this since the calculation is simple already.
 	
- 	public Promotion(Calendar promotionStartDateTime, Calendar promotionEndDateTime, List<ArrayList<Object>> promotionItemCombination, int discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
+ 	public Promotion(Calendar promotionStartDateTime, Calendar promotionEndDateTime, List<ArrayList<Object>> promotionItemCombination, DiscountMode discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
 		super();
 		this.name = "";
 		this.promotionStartDateTime = promotionStartDateTime;
@@ -39,25 +41,24 @@ public class Promotion {
 		
 		this.discountMode = discountMode;
 		switch (this.discountMode) {
-			case 0:
+			case DiscountPect:
 				this.discountPect = discountPect.compareTo(new BigDecimal("100"))>0? new BigDecimal("100"):
 					discountPect.compareTo(new BigDecimal("1"))<0? new BigDecimal("1"):
 						discountPect;
 				break;
-			case 1:
+			case DiscountPrice:
 				this.discountedPrice = discountedPrice.compareTo(new BigDecimal("0"))<0? new BigDecimal("0"): discountedPrice; //it could be higher then original price
 				break;
-				
+			
 			default:
-				discountMode = -1;
 				break;
 		}
 	}
 	
-	public int getDiscountMode() {
+	public DiscountMode getDiscountMode() {
 		return discountMode;
 	}
-	public void setDiscountMode(int discountMode) {
+	public void setDiscountMode(DiscountMode discountMode) {
 		this.discountMode = discountMode;
 	}
 
@@ -100,7 +101,7 @@ public class Promotion {
 	}
 
 	public BigDecimal getDiscountPectForPriceCalculation() {
-		if(this.getDiscountMode()==0 && this.getDiscountPect()!=null) {
+		if(this.getDiscountMode()==DiscountMode.DiscountPect) {
 			return new BigDecimal("100").subtract(this.getDiscountPect()).divide(new BigDecimal("100"));
 		}
 		return null;
@@ -127,13 +128,13 @@ public class Promotion {
 	}
 	public BigDecimal getPromotionPrice() {
 		switch (this.discountMode) {
-		case 0:
+		case DiscountPect:
 			BigDecimal totalPrice = this.getOriginalTotalPrice();
 			if(totalPrice!=null) {
 				return totalPrice.multiply(this.getDiscountPectForPriceCalculation());
 			}
 			break;
-		case 1:
+		case DiscountPrice:
 			return this.getDiscountedPrice();
 			
 		default:
