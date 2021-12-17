@@ -96,4 +96,7 @@ There are 2 ways to prioritise the promotion: apply first on the highest total s
 ## Apply promotion to the cart
 By calling Cart.applyPromotion(), it starts retrieve which promotion could be used in this cart by calling the above algorithm. Afterward, the engine will try applying the promotion and see if it works.
 
-Although the question stated the promtions are mutually exclusive, the sample Scenarios are applying different promotion at the same time. I would assume the [mutually exclsuive] represents each unit of the item is only availble to 1 promotion only. For example, there are 3 units of item A, and buying 2 units of item A could have a 10% off discount. The promotion could only be applied once. It makes more sense to the [mutually exclusive] means.
+Although the question stated the promtions are mutually exclusive, the sample Scenarios are applying different promotion at the same time. I would assume the [mutually exclsuive] represents each unit of the item is only availble to 1 promotion only. For example, there are 3 units of item A, and buying 2 units of item A could have a 10% off discount. The promotion could only be applied once (1st+2nd unit), but not twice (1st+2nd & 2nd+3rd unit). It makes more sense to the [mutually exclusive] means.
+
+### Usage
+Check with the 5th unit test - <i>UnitTest5_Cart_Promotion_Process.java</i> - would find the usage of the engine and how it works. There is a complex case simulating a real-time shopping cart movement of a customer.
