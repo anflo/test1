@@ -1,7 +1,9 @@
 package cart;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import item.Item;
 import item.promotion.Promotion;
@@ -9,12 +11,16 @@ import item.promotion.Promotion;
 public class Cart {
 
 	//0=Item, 1=quantity
-	private List<ArrayList<Object>> myCart; //each node, 0=item, 1=qty
+	//private List<ArrayList<Object>> myCart; //each node, 0=item, 1=qty
+	private HashMap<String, ArrayList<Object>> myCart; //each node, 0=item, 1=qty
 	//myCart stores for non-promotion items only
 	public final static int cartItemItemIndex = 0;
 	public final static int cartItemQtyIndex = 1;
-	public List<ArrayList<Object>> getMyCart(){
-		return this.myCart;
+//	public List<ArrayList<Object>> getMyCart(){
+//		return this.myCart;
+//	}
+	public HashMap<String, ArrayList<Object>> getMyCart() {
+		return myCart;
 	}
 	
 	
@@ -39,9 +45,11 @@ public class Cart {
 			dismissAllAppliedPromotionGroup();
 		}
 		
+		/*
 		if (this.myCart==null || this.myCart.size()<=0) {
-			myCart = new ArrayList<ArrayList<Object>>();
-			addItemAtTail(newItem, newQuantity);
+//			myCart = new ArrayList<ArrayList<Object>>();
+			myCart = new HashMap<String, ArrayList<Object>>();
+			addItemToCart(newItem, newQuantity);
 			
 		} else {
 			for(int i=0; i<this.myCart.size(); i++) {
@@ -61,25 +69,48 @@ public class Cart {
 			}
 			
 			//loop all existing item and cant find the new one, insert at the end
-			addItemAtTail(newItem, newQuantity);
+			addItemToCart(newItem, newQuantity);
+		}
+		*/
+		if (newItem!=null && newItem.getSku()!=null && newItem.getSku().length()>0 &&
+			newQuantity>0
+		) {
+			ArrayList newItemNode = new ArrayList<Object>();
+			newItemNode.add(newItem);
+			newItemNode.add(newQuantity);
+			myCart.put(newItem.getSku(), newItemNode);
+		} else if (newQuantity<=0) {
+			myCart.remove(newItem.getSku());
 		}
 	}
-	private void addItemAtTail(Item newItem, int newQuantity) {
+	/*
+	private void addItemToCart(Item newItem, int newQuantity) {
 		ArrayList newItemNode = new ArrayList<Object>();
 		newItemNode.add(newItem);
 		newItemNode.add(newQuantity);
-		myCart.add(newItemNode);
+		//myCart.add(newItemNode);
+		myCart.put(newItem.getSku(), newItemNode);
 	}
+	*/
 
+	//item non-promoted qty
 	public int getItemQuanitiy(Item newItem) {
-		if (this.myCart!=null && this.myCart.size()>0) {
-			for(int i=0; i<this.myCart.size(); i++) {
-				ArrayList tempItemNode = (ArrayList)this.myCart.get(i);
-				Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
-				if (tempItem.getSku().equals(newItem.getSku())) {
-					return (int)tempItemNode.get(cartItemQtyIndex);
-				}
-			}
+//		if (this.myCart!=null && this.myCart.size()>0) {
+//			for(int i=0; i<this.myCart.size(); i++) {
+//				ArrayList tempItemNode = (ArrayList)this.myCart.get(i);
+//				Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
+//				if (tempItem.getSku().equals(newItem.getSku())) {
+//					return (int)tempItemNode.get(cartItemQtyIndex);
+//				}
+//			}
+//		}
+		if (newItem!=null && newItem.getSku()!=null && newItem.getSku().length()>0 &&
+			myCart!=null && myCart.size()>0 && myCart.containsKey(newItem.getSku())
+		) {
+			ArrayList<Object> tempItemNode = myCart.get(newItem.getSku());
+			Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
+			int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
+			return tempItemQty;
 		}
 		
 		return 0; //can choose to return -1 to represent item not existing, but this is not important yet 
@@ -115,15 +146,22 @@ public class Cart {
 	
 	//mainly for dismissAllAppliedPromotionGroup(). 
 	public int getNonPromotedItemQty(Item item) {
-		if (this.myCart.size()>0) {
-			for(int i=0; i<this.myCart.size(); i++) {
-				ArrayList tempItemNode = (ArrayList)this.myCart.get(i);
-				Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
-				int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
-				if (tempItem.getSku().equals(item.getSku())) {
-					return tempItemQty;
-				}
-			}
+		if (item!=null && item.getSku()!=null && item.getSku().length()>0 && 
+			this.myCart.size()>0 && this.myCart.containsKey(item.getSku())
+		) {
+//			for(int i=0; i<this.myCart.size(); i++) {
+//				ArrayList tempItemNode = (ArrayList)this.myCart.get(i);
+//				Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
+//				int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
+//				if (tempItem.getSku().equals(item.getSku())) {
+//					return tempItemQty;
+//				}
+//			}
+			ArrayList<Object> tempItemNode = (ArrayList<Object>)this.myCart.get(item.getSku());
+//			Item tempItem = (Item)tempItemNode.get(cartItemItemIndex);
+			int tempItemQty = (int)tempItemNode.get(cartItemQtyIndex);
+			return tempItemQty;
+
 		}
 		return 0;
 	}
@@ -201,13 +239,19 @@ public class Cart {
 		return "Cart [myCart=" + myCart + ", promotionGroup=" + promotionGroup + "]";
 	}
 	public Cart() {
-		this(new ArrayList<ArrayList<Object>>(), new ArrayList<Promotion>());
+//		this(new ArrayList<ArrayList<Object>>(), new ArrayList<Promotion>());
+		this(new HashMap<String, ArrayList<Object>>(), new ArrayList<Promotion>());
 	}
-	public Cart(List<ArrayList<Object>> myCart, List<Promotion> promotionGroup) {
+//	public Cart(List<ArrayList<Object>> myCart, List<Promotion> promotionGroup) {
+//		super();
+//		this.myCart = myCart;
+//		this.promotionGroup = promotionGroup;
+//	}
+	public Cart(HashMap<String, ArrayList<Object>> myCart, List<Promotion> promotionGroup) {
 		super();
 		this.myCart = myCart;
 		this.promotionGroup = promotionGroup;
 	}
-
 }
+
 

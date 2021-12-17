@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import cart.Cart;
 import item.Item;
 
 public class Promotion {
@@ -26,7 +25,7 @@ public class Promotion {
 	private BigDecimal discountPect; //how many % off from original price, should be between 1-100 only
 	private BigDecimal discountedPrice;
 	
-	private boolean isOriginalTotalPriceCached = false; //cache promotion calcuation if calculated already
+	private boolean isOriginalTotalPriceCached = false; //cache promotion calculation if calculated already
 	private BigDecimal originalTotalPrice;
 //	private BigDecimal calculatedDiscountPrice;
 //	private BigDecimal calculatedTotalSaved; //wont do this since the calculation is simple already.
@@ -55,50 +54,31 @@ public class Promotion {
 		}
 	}
 	
-	
-	
 	public int getDiscountMode() {
 		return discountMode;
 	}
-
-
-
 	public void setDiscountMode(int discountMode) {
 		this.discountMode = discountMode;
 	}
 
-
-
 	public BigDecimal getDiscountPect() {
 		return discountPect;
 	}
-
-
-
 	public void setDiscountPect(BigDecimal discountPect) {
 		this.discountPect = discountPect;
 	}
 
-
-
 	public BigDecimal getDiscountedPrice() {
 		return discountedPrice;
 	}
-
-
-
 	public void setDiscountedPrice(BigDecimal discountedPrice) {
 		this.discountedPrice = discountedPrice;
 	}
-
-	
 
 
 	public List<ArrayList<Object>> getPromotionItemCombination() {
 		return promotionItemCombination;
 	}
-
-
 	/* 
 	 * Better not to be altered in any place except DB query
 	public void setPromotionItemCombination(List<ArrayList<Object>> promotionItemCombination) {
@@ -165,15 +145,6 @@ public class Promotion {
 	public BigDecimal getTotalSaved() {
 		return this.getOriginalTotalPrice().subtract(this.getPromotionPrice());
 	}
-	
- 	public boolean promoteValidOnThisCart(Cart cart) {
-		
-		return false;
-	}
-	
-	public BigDecimal discountedPrice(){
-		
-		return null;
-	}
+
 	
 }
