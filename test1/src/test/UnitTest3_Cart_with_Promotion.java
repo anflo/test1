@@ -20,10 +20,6 @@ import item.promotion.Promotion;
 import item.promotion.PromotionItem;
 
 class UnitTest3_Cart_with_Promotion {
-	protected Item a;
-	protected Item b;
-	protected Item c;
-	protected Item d;
 	protected Cart cart;
 	DecimalFormat df = new DecimalFormat("#,###.00");
 	TimeZone timeZone = TimeZone.getTimeZone("GMT");
@@ -35,12 +31,6 @@ class UnitTest3_Cart_with_Promotion {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		this.a = ItemDB.ITEM_A; //new Item("A", new BigDecimal("50"));
-		this.b = ItemDB.ITEM_B; //new Item("B", new BigDecimal("30"));
-		this.c = ItemDB.ITEM_C; //new Item("C", new BigDecimal("20"));
-		this.d = ItemDB.ITEM_D; //new Item("D", new BigDecimal("15"));
-		
-		
 		
 		//promotion set A
 		Calendar promotionAStartDateTime = Calendar.getInstance(timeZone);
@@ -49,7 +39,7 @@ class UnitTest3_Cart_with_Promotion {
 		promotionAEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
 		List<PromotionItem> promotionAItemCombination = new ArrayList<PromotionItem>();
-		PromotionItem p1A = new PromotionItem(a, 2);
+		PromotionItem p1A = new PromotionItem(ItemDB.ITEM_A, 2);
 		promotionAItemCombination.add(p1A);
 		
 		DiscountMode promotionADiscountType = DiscountMode.DiscountPect; //pect
@@ -66,8 +56,8 @@ class UnitTest3_Cart_with_Promotion {
 		promotionBEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
 		List<PromotionItem> promotionBItemCombination = new ArrayList<PromotionItem>();
-		PromotionItem p2A = new PromotionItem(a, 2);
-		PromotionItem p2B = new PromotionItem(b, 3);
+		PromotionItem p2A = new PromotionItem(ItemDB.ITEM_A, 2);
+		PromotionItem p2B = new PromotionItem(ItemDB.ITEM_B, 3);
 		promotionBItemCombination.add(p2A);
 		promotionBItemCombination.add(p2B);
 		
@@ -83,25 +73,25 @@ class UnitTest3_Cart_with_Promotion {
 
 	@Test
 	void cartTestOnChangingQtyWithPromotion() {
-		cart.updateItem(a, 3, false); //3A in non-promotion cart
-		assertEquals(cart.getItemQuanitiy(a), 3);
+		cart.updateItem(ItemDB.ITEM_A, 3, false); //3A in non-promotion cart
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_A), 3);
 		cart.addPromotionGroup(promotionA); //3A in non-promotion cart + 2A in promotion cart
-		assertEquals(cart.getItemQuanitiy(a), 3); //get 3 on fucntion's purpose
-		assertEquals(cart.getPromotedItemQty(a), 2); //get 2 on fucntion's purpose
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_A), 3); //get 3 on fucntion's purpose
+		assertEquals(cart.getPromotedItemQty(ItemDB.ITEM_A), 2); //get 2 on fucntion's purpose
 		
-		cart.updateItem(a, 7, true); //dismiss promotion items
-		assertEquals(cart.getItemQuanitiy(a), 7); //updated to 7A
-		assertEquals(cart.getItemQuanitiy(b), 0); 
+		cart.updateItem(ItemDB.ITEM_A, 7, true); //dismiss promotion items
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_A), 7); //updated to 7A
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_B), 0); 
 		
 		cart.addPromotionGroup(promotionB); //7A in non-promotion cart + (2A & 3B in promotion cart)
-		assertEquals(cart.getItemQuanitiy(a), 7);
-		assertEquals(cart.getPromotedItemQty(a), 2); 
-		assertEquals(cart.getPromotedItemQty(b), 3);
-		cart.updateItem(b, 4, true); //dismiss promotion items all promotions
-		assertEquals(cart.getItemQuanitiy(a), 9);
-		assertEquals(cart.getItemQuanitiy(b), 4);
-		assertEquals(cart.getPromotedItemQty(a), 0); 
-		assertEquals(cart.getPromotedItemQty(b), 0);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_A), 7);
+		assertEquals(cart.getPromotedItemQty(ItemDB.ITEM_A), 2); 
+		assertEquals(cart.getPromotedItemQty(ItemDB.ITEM_B), 3);
+		cart.updateItem(ItemDB.ITEM_B, 4, true); //dismiss promotion items all promotions
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_A), 9);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_B), 4);
+		assertEquals(cart.getPromotedItemQty(ItemDB.ITEM_A), 0); 
+		assertEquals(cart.getPromotedItemQty(ItemDB.ITEM_B), 0);
 		
 	}
 

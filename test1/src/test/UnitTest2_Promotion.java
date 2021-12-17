@@ -19,11 +19,6 @@ import item.promotion.Promotion;
 import item.promotion.PromotionItem;
 
 class UnitTest2_Promotion {
-	protected Item a;
-	protected Item b;
-	protected Item c;
-	protected Item d;
-	
 	DecimalFormat df = new DecimalFormat("#,###.00");
 	TimeZone timeZone = TimeZone.getTimeZone("GMT");
 	Promotion promotionA;
@@ -34,11 +29,6 @@ class UnitTest2_Promotion {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		this.a = ItemDB.ITEM_A; //new Item("A", new BigDecimal("50"));
-		this.b = ItemDB.ITEM_B; //new Item("B", new BigDecimal("30"));
-		this.c = ItemDB.ITEM_C; //new Item("C", new BigDecimal("20"));
-		this.d = ItemDB.ITEM_D; //new Item("D", new BigDecimal("15"));
-		
 		
 		//promotion set A
 		Calendar promotionAStartDateTime = Calendar.getInstance(timeZone);
@@ -47,7 +37,7 @@ class UnitTest2_Promotion {
 		promotionAEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
 		List<PromotionItem> promotionAItemCombination = new ArrayList<PromotionItem>();
-		PromotionItem p1A = new PromotionItem(a,2);
+		PromotionItem p1A = new PromotionItem(ItemDB.ITEM_A,2);
 		promotionAItemCombination.add(p1A);
 		
 		DiscountMode promotionADiscountType = DiscountMode.DiscountPect; //pect
@@ -63,8 +53,8 @@ class UnitTest2_Promotion {
 		promotionBEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
 		
 		List<PromotionItem> promotionBItemCombination = new ArrayList<PromotionItem>();
-		PromotionItem p2A = new PromotionItem(a,2);
-		PromotionItem p2B = new PromotionItem(b,3);
+		PromotionItem p2A = new PromotionItem(ItemDB.ITEM_A,2);
+		PromotionItem p2B = new PromotionItem(ItemDB.ITEM_B,3);
 		promotionBItemCombination.add(p2A);
 		promotionBItemCombination.add(p2B);
 		
@@ -98,7 +88,7 @@ class UnitTest2_Promotion {
 		assertEquals(promotionA.getDiscountPectForPriceCalculation(), new BigDecimal("0.9"));
 		
 		assertEquals(df.format(promotionA.getPromotionPrice()), 
-				df.format(a.getUnitPrice()
+				df.format(ItemDB.ITEM_A.getUnitPrice()
 					.multiply(new BigDecimal("2"))
 					.multiply(promotionA.getDiscountPectForPriceCalculation())
 				)); 
@@ -106,8 +96,8 @@ class UnitTest2_Promotion {
 		
 		
 		//promotion set B
-		BigDecimal itemAOriginalTotalPrice = a.getUnitPrice().multiply(new BigDecimal("2"));
-		BigDecimal itemBOriginalTotalPrice = b.getUnitPrice().multiply(new BigDecimal("3"));
+		BigDecimal itemAOriginalTotalPrice = ItemDB.ITEM_A.getUnitPrice().multiply(new BigDecimal("2"));
+		BigDecimal itemBOriginalTotalPrice = ItemDB.ITEM_B.getUnitPrice().multiply(new BigDecimal("3"));
 		BigDecimal itemABOriginalTotalPrice = itemAOriginalTotalPrice.add(itemBOriginalTotalPrice);
 		BigDecimal itemABDiscountedTotalPrice = itemABOriginalTotalPrice.multiply(promotionB.getDiscountPectForPriceCalculation());
 		

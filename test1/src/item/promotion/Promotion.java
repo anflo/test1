@@ -1,6 +1,5 @@
 package item.promotion;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -21,8 +20,6 @@ public class Promotion {
 	private Calendar promotionStartDateTime;
 	private Calendar promotionEndDateTime;
 	private List<PromotionItem> promotionItemCombination; //for each node, 0=Item, 1=quantity required
-//	public static final int promotionItemNodeItemIndex = 0;
-//	public static final int promotionItemNodeQtyIndex = 1;
 	private DiscountMode discountMode;
 	private BigDecimal discountPect; //how many % off from original price, should be between 1-100 only
 	private BigDecimal discountedPrice;

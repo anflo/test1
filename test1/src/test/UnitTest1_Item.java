@@ -13,40 +13,31 @@ import item.ItemDB;
 
 class UnitTest1_Item {
 
-	protected Item a;
-	protected Item b;
-	protected Item c;
-	protected Item d;
 	protected Cart cart;
 	
 	@BeforeEach
 	void setUp(){
-		this.a = ItemDB.ITEM_A; //new Item("A", new BigDecimal("50"));
-		this.b = ItemDB.ITEM_B; //new Item("B", new BigDecimal("30"));
-		this.c = ItemDB.ITEM_C; //new Item("C", new BigDecimal("20"));
-		this.d = ItemDB.ITEM_D; //new Item("D", new BigDecimal("15"));
-		
 		cart = new Cart();
 	}
 	
 	@Test
 	void simpleCartOperationTest() {
-		assertEquals("A", this.a.getSku());
-		assertEquals(new BigDecimal("50"), this.a.getUnitPrice());
+		assertEquals("A", ItemDB.ITEM_A.getSku());
+		assertEquals(new BigDecimal("50"), ItemDB.ITEM_A.getUnitPrice());
     	
-		cart.updateItem(a, 3);
-		assertEquals(cart.getItemQuanitiy(a), 3);
-		cart.updateItem(a, 7);
-		assertEquals(cart.getItemQuanitiy(a), 7);
+		cart.updateItem(ItemDB.ITEM_A, 3);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_A), 3);
+		cart.updateItem(ItemDB.ITEM_A, 7);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_A), 7);
 		
-		cart.updateItem(b, 2);
-		cart.updateItem(c, 5);
-		cart.updateItem(d, 15);
-		assertEquals(cart.getItemQuanitiy(b), 2);
-		assertEquals(cart.getItemQuanitiy(c), 5);
-		assertEquals(cart.getItemQuanitiy(d), 15);
-		cart.updateItem(c, 0);
-		assertEquals(cart.getItemQuanitiy(c), 0);
+		cart.updateItem(ItemDB.ITEM_B, 2);
+		cart.updateItem(ItemDB.ITEM_C, 5);
+		cart.updateItem(ItemDB.ITEM_D, 15);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_B), 2);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_C), 5);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_D), 15);
+		cart.updateItem(ItemDB.ITEM_C, 0);
+		assertEquals(cart.getItemQuanitiy(ItemDB.ITEM_C), 0);
 	}
 
 }
