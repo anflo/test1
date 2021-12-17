@@ -9,8 +9,6 @@ import item.promotion.Promotion;
 
 public class Cart {
 
-	//0=Item, 1=quantity
-	//private List<ArrayList<Object>> myCart; //each node, 0=item, 1=qty
 	private HashMap<String, ArrayList<Object>> myCart; //each node, 0=item, 1=qty
 	//myCart stores for non-promotion items only
 	public final static int cartItemItemIndex = 0;
