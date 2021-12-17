@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,11 +27,11 @@ class UnitTest5_Cart_Promotion_Process {
 	protected Cart cart5;
 	protected Cart cart6;
 	CartPromotion cp;
-	TimeZone timeZone;
+	ZoneId zoneId;
 	@BeforeEach
 	void setUp() throws Exception {
 		cp = new CartPromotion();
-		timeZone = TimeZone.getTimeZone("GMT");
+		zoneId = ZoneId.of("UTC+0");
 		
 		cart1 = new Cart();
 		cart1.updateItem(ItemDB.ITEM_A, 3, false);
@@ -57,8 +59,7 @@ class UnitTest5_Cart_Promotion_Process {
 	void test() {
 		//cart 1: 3A
 		// promotion should be applied: A
-		Calendar processDateTime1 = Calendar.getInstance(timeZone);
-		processDateTime1.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime1 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		PromotionProcess pc1 = new PromotionProcess(cart1);
 		cart1 = pc1.applyPromotion(processDateTime1);
 		ArrayList<Promotion> p1Group = (ArrayList<Promotion>) cart1.getPromotionGroup();
@@ -66,7 +67,7 @@ class UnitTest5_Cart_Promotion_Process {
 		assertEquals(p1Group.get(0).getName(), "A");
 		assertEquals(cart1.getItemQuanitiy(ItemDB.ITEM_A), 1);
 		assertEquals(cart1.getPromotedItemQty(ItemDB.ITEM_A), 2);
-		processDateTime1.set(2022, 11, 25, 0, 0); //2022-dec-25 0:00am
+		processDateTime1 = ZonedDateTime.of(2022, 12, 25, 0, 0, 0, 0, zoneId); //2022-dec-25 0:00am
 		cart1 = pc1.applyPromotion(processDateTime1);
 		p1Group = (ArrayList<Promotion>) cart1.getPromotionGroup();
 		assertEquals(p1Group.size(), 0);
@@ -75,8 +76,7 @@ class UnitTest5_Cart_Promotion_Process {
 		
 		//cart 2: 3A +4B
 		// promotion should be applied: B 
-		Calendar processDateTime2 = Calendar.getInstance(timeZone);
-		processDateTime2.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime2 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		PromotionProcess pc2 = new PromotionProcess(cart2);
 		cart2 = pc2.applyPromotion(processDateTime2);
 		ArrayList<Promotion> p2Group = (ArrayList<Promotion>) cart2.getPromotionGroup();
@@ -90,8 +90,7 @@ class UnitTest5_Cart_Promotion_Process {
 		
 		//cart 3: 9A + 7B
 		// promotion should be applied: B x 2 + A x 2
-		Calendar processDateTime3 = Calendar.getInstance(timeZone);
-		processDateTime3.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime3 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		PromotionProcess pc3 = new PromotionProcess(cart3);
 		cart3 = pc3.applyPromotion(processDateTime3);
 		ArrayList<Promotion> p3Group = (ArrayList<Promotion>) cart3.getPromotionGroup();
@@ -108,8 +107,7 @@ class UnitTest5_Cart_Promotion_Process {
 		
 		//cart 4: 4A + 3B + 12C
 		// promotion should be applied: F + E + C
-		Calendar processDateTime4 = Calendar.getInstance(timeZone);
-		processDateTime4.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime4 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		PromotionProcess pc4 = new PromotionProcess(cart4);
 		cart4 = pc4.applyPromotion(processDateTime4);
 		ArrayList<Promotion> p4Group = (ArrayList<Promotion>) cart4.getPromotionGroup();
@@ -127,8 +125,7 @@ class UnitTest5_Cart_Promotion_Process {
 		
 		//cart 5: 8C
 		// promotion should be applied: E , not C+D
-		Calendar processDateTime5 = Calendar.getInstance(timeZone);
-		processDateTime5.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime5 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		PromotionProcess pc5 = new PromotionProcess(cart5);
 		cart5 = pc5.applyPromotion(processDateTime5);
 		ArrayList<Promotion> p5Group = (ArrayList<Promotion>) cart5.getPromotionGroup();
@@ -139,8 +136,7 @@ class UnitTest5_Cart_Promotion_Process {
 		
 		
 		//cart 6: real-time moving along items
-		Calendar processDateTime6 = Calendar.getInstance(timeZone);
-		processDateTime6.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime6 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		//Step 1: add Promotion-C into cart
 		cart6.addPromotionGroup(cp.getPromotionByName("C"));
 		PromotionProcess pc6 = new PromotionProcess(cart6);

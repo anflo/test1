@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -20,7 +22,7 @@ import item.promotion.PromotionItem;
 
 class UnitTest2_Promotion {
 	DecimalFormat df = new DecimalFormat("#,###.00");
-	TimeZone timeZone = TimeZone.getTimeZone("GMT");
+	ZoneId zoneId;
 	Promotion promotionA;
 	BigDecimal promotionADiscountPect;
 	
@@ -29,13 +31,11 @@ class UnitTest2_Promotion {
 	
 	@BeforeEach
 	void setUp() throws Exception {
+		zoneId = ZoneId.of("UTC+0");
 		
 		//promotion set A
-		Calendar promotionAStartDateTime = Calendar.getInstance(timeZone);
-		promotionAStartDateTime.set(2021, 11, 20, 4, 0); //2021-dec-20 4:00am
-		Calendar promotionAEndDateTime = Calendar.getInstance(timeZone);
-		promotionAEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
-		
+		ZonedDateTime promotionAStartDateTime = ZonedDateTime.of(2021, 12, 20, 4, 0, 0, 0, zoneId); //2021-dec-20 4:00am
+		ZonedDateTime promotionAEndDateTime = ZonedDateTime.of(2022, 1, 4, 3, 59, 59, 0, zoneId); //2022-jan-1 3:59:59am
 		List<PromotionItem> promotionAItemCombination = new ArrayList<PromotionItem>();
 		PromotionItem p1A = new PromotionItem(ItemDB.ITEM_A,2);
 		promotionAItemCombination.add(p1A);
@@ -47,11 +47,8 @@ class UnitTest2_Promotion {
 		
 		
 		//promotion set B
-		Calendar promotionBStartDateTime = Calendar.getInstance(timeZone);
-		promotionBStartDateTime.set(2021, 11, 20, 4, 0); //2021-dec-20 4:00am
-		Calendar promotionBEndDateTime = Calendar.getInstance(timeZone);
-		promotionBEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
-		
+		ZonedDateTime promotionBStartDateTime = ZonedDateTime.of(2021, 12, 20, 4, 0, 0, 0, zoneId); //2021-dec-20 4:00am
+		ZonedDateTime promotionBEndDateTime = ZonedDateTime.of(2022, 1, 1, 4, 0, 0, 0, zoneId); //2022-jan-1 4:00am
 		List<PromotionItem> promotionBItemCombination = new ArrayList<PromotionItem>();
 		PromotionItem p2A = new PromotionItem(ItemDB.ITEM_A,2);
 		PromotionItem p2B = new PromotionItem(ItemDB.ITEM_B,3);
@@ -67,21 +64,17 @@ class UnitTest2_Promotion {
 	@Test
 	void simplePromotionOperationTest() {
 		//promotion set A
-		Calendar promotionATest1DateTime = Calendar.getInstance(timeZone);
-		promotionATest1DateTime.set(2021, 11, 20, 4, 0); //2021-dec-20 4:00am
+		ZonedDateTime promotionATest1DateTime = ZonedDateTime.of(2021, 12, 20, 4, 0, 0, 0, zoneId); //2021-dec-20 4:00am
 		assertTrue(promotionA.isOnPromotion(promotionATest1DateTime));
 		
-		Calendar promotionATest2DateTime = Calendar.getInstance(timeZone);
-		promotionATest2DateTime.set(2021, 11, 20, 3, 59); //2021-dec-20 3:59am
+		ZonedDateTime promotionATest2DateTime = ZonedDateTime.of(2021, 12, 20, 3, 59, 59, 0, zoneId); //2021-dec-20 3:59am
 		assertFalse(promotionA.isOnPromotion(promotionATest2DateTime));
 		
 		
-		Calendar promotionATest3DateTime = Calendar.getInstance(timeZone);
-		promotionATest3DateTime.set(2022, 0, 1, 3, 59); //2022-jan-1 3:59am
+		ZonedDateTime promotionATest3DateTime = ZonedDateTime.of(2022, 1, 1, 3, 59, 59, 0, zoneId); //2022-jan-1 3:59am
 		assertTrue(promotionA.isOnPromotion(promotionATest3DateTime));
 		
-		Calendar promotionATest4DateTime = Calendar.getInstance(timeZone);
-		promotionATest4DateTime.set(2022, 0, 1, 4, 0); //2022-jan-1 4:00am
+		ZonedDateTime promotionATest4DateTime = ZonedDateTime.of(2022, 1, 4, 4, 0, 0, 0, zoneId); //2022-jan-1 4:00am
 		assertFalse(promotionA.isOnPromotion(promotionATest4DateTime));
 		
 		assertEquals(promotionA.getDiscountPect(),new BigDecimal("10"));

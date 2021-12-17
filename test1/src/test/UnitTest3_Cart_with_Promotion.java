@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -22,7 +24,7 @@ import item.promotion.PromotionItem;
 class UnitTest3_Cart_with_Promotion {
 	protected Cart cart;
 	DecimalFormat df = new DecimalFormat("#,###.00");
-	TimeZone timeZone = TimeZone.getTimeZone("GMT");
+	ZoneId zoneId;
 	Promotion promotionA;
 	BigDecimal promotionADiscountPect;
 	
@@ -31,30 +33,24 @@ class UnitTest3_Cart_with_Promotion {
 	
 	@BeforeEach
 	void setUp() throws Exception {
+		zoneId = ZoneId.of("UTC+0");
 		
 		//promotion set A
-		Calendar promotionAStartDateTime = Calendar.getInstance(timeZone);
-		promotionAStartDateTime.set(2021, 11, 20, 4, 0); //2021-dec-20 4:00am
-		Calendar promotionAEndDateTime = Calendar.getInstance(timeZone);
-		promotionAEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
-		
+		ZonedDateTime promotionAStartDateTime = ZonedDateTime.of(2021, 12, 20, 4, 0, 0, 0, zoneId); //2021-dec-20 4:00am
+		ZonedDateTime promotionAEndDateTime = ZonedDateTime.of(2022, 1, 1, 4, 0, 0, 0, zoneId); //2022-jan-1 4:00am
 		List<PromotionItem> promotionAItemCombination = new ArrayList<PromotionItem>();
 		PromotionItem p1A = new PromotionItem(ItemDB.ITEM_A, 2);
 		promotionAItemCombination.add(p1A);
 		
 		DiscountMode promotionADiscountType = DiscountMode.DiscountPect; //pect
 		promotionADiscountPect = new BigDecimal("10"); //10% off
-		
 		promotionA = new Promotion(promotionAStartDateTime, promotionAEndDateTime, promotionAItemCombination, promotionADiscountType, promotionADiscountPect, null);
 		//END: promotion set A
 		
 		
 		//promotion set B
-		Calendar promotionBStartDateTime = Calendar.getInstance(timeZone);
-		promotionBStartDateTime.set(2021, 11, 20, 4, 0); //2021-dec-20 4:00am
-		Calendar promotionBEndDateTime = Calendar.getInstance(timeZone);
-		promotionBEndDateTime.set(2022, 0, 1, 4, 00); //2022-jan-1 4:00am
-		
+		ZonedDateTime promotionBStartDateTime = ZonedDateTime.of(2021, 12, 20, 4, 0, 0, 0, zoneId); //2021-dec-20 4:00am
+		ZonedDateTime promotionBEndDateTime = ZonedDateTime.of(2022, 1, 1, 4, 0, 0, 0, zoneId); //2022-jan-1 4:00am
 		List<PromotionItem> promotionBItemCombination = new ArrayList<PromotionItem>();
 		PromotionItem p2A = new PromotionItem(ItemDB.ITEM_A, 2);
 		PromotionItem p2B = new PromotionItem(ItemDB.ITEM_B, 3);
@@ -67,7 +63,7 @@ class UnitTest3_Cart_with_Promotion {
 		promotionB = new Promotion(promotionBStartDateTime, promotionBEndDateTime, promotionBItemCombination, promotionBDiscountType, promotionBDiscountPect, null);
 		//END: promotion set B
 		
-		
+
 		cart = new Cart();
 	}
 

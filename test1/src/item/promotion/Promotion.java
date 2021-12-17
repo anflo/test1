@@ -1,6 +1,6 @@
 package item.promotion;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import item.Item;
@@ -17,8 +17,8 @@ public class Promotion {
 		this.name = name;
 	}
 
-	private Calendar promotionStartDateTime;
-	private Calendar promotionEndDateTime;
+	private ZonedDateTime promotionStartDateTime;
+	private ZonedDateTime promotionEndDateTime;
 	private List<PromotionItem> promotionItemCombination; //for each node, 0=Item, 1=quantity required
 	private DiscountMode discountMode;
 	private BigDecimal discountPect; //how many % off from original price, should be between 1-100 only
@@ -29,7 +29,7 @@ public class Promotion {
 //	private BigDecimal calculatedDiscountPrice;
 //	private BigDecimal calculatedTotalSaved; //wont do this since the calculation is simple already.
 	
- 	public Promotion(Calendar promotionStartDateTime, Calendar promotionEndDateTime, List<PromotionItem> promotionItemCombination, DiscountMode discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
+ 	public Promotion(ZonedDateTime promotionStartDateTime, ZonedDateTime promotionEndDateTime, List<PromotionItem> promotionItemCombination, DiscountMode discountMode, BigDecimal discountPect, BigDecimal discountedPrice) {
 		super();
 		this.name = "";
 		this.promotionStartDateTime = promotionStartDateTime;
@@ -87,11 +87,11 @@ public class Promotion {
 
 
 	public boolean isOnPromotion() {
-		Calendar today = Calendar.getInstance();
-		return isOnPromotion(today);
+		ZonedDateTime now = ZonedDateTime.now();
+		return isOnPromotion(now);
 	}
-	public boolean isOnPromotion(Calendar inputDateTime) {
-		if (promotionStartDateTime.compareTo(inputDateTime)<=0 && promotionEndDateTime.compareTo(inputDateTime)>=0) {
+	public boolean isOnPromotion(ZonedDateTime inputDateTime) {
+		if (promotionStartDateTime.compareTo(inputDateTime)<=0 && promotionEndDateTime.compareTo(inputDateTime)>0) {
 			return true;
 		}
 		return false;

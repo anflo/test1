@@ -1,5 +1,6 @@
 package item.promotion.process;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -19,10 +20,10 @@ public class PromotionProcess {
 	}
 	
 	public Cart applyPromotion() {
-		return applyPromotion(Calendar.getInstance());
+		return applyPromotion(ZonedDateTime.now());
 	}
 	
-	public Cart applyPromotion(Calendar processDateCalendar) {
+	public Cart applyPromotion(ZonedDateTime processDateCalendar) {
 		ArrayList<Promotion> promotionGroup = (ArrayList<Promotion>)this.cart.getPromotionGroup();
 		if(promotionGroup!=null && promotionGroup.size()>0) {
 			this.cart.dismissAllAppliedPromotionGroup(); //make sure all promotion has been removed for re-calculation

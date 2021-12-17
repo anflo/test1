@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -20,11 +22,11 @@ class UnitTest4_CartPromotion {
 	protected Cart cart2;
 	protected Cart cart3;
 	CartPromotion cp;
-	TimeZone timeZone;
+	ZoneId zoneId;
 	@BeforeEach
 	void setUp() throws Exception {
 		cp = new CartPromotion();
-		timeZone = TimeZone.getTimeZone("GMT");
+		zoneId = ZoneId.of("UTC+0");
 		
 		cart1 = new Cart();
 		cart1.updateItem(ItemDB.ITEM_A, 3);
@@ -41,28 +43,26 @@ class UnitTest4_CartPromotion {
 
 	@Test
 	void simpleTestOnCardPromotionAlgorithm() {
-		Calendar processDateTime1 = Calendar.getInstance(timeZone);
-		processDateTime1.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime1 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		ArrayList<Promotion> pList1 = cp.getRelatedPromotions(cart1, processDateTime1);
 		assertEquals(pList1.size(), 1);
 		assertEquals(pList1.get(0).getName(), "A");
-		processDateTime1.set(2022, 11, 25, 0, 0); //2022-dec-25 0:00am
+		processDateTime1 = ZonedDateTime.of(2022, 12, 25, 0, 0, 0, 0, zoneId); //2022-dec-25 0:00am
 		pList1 = cp.getRelatedPromotions(cart1, processDateTime1);
 		assertEquals(pList1.size(), 0);
 		
-		Calendar processDateTime2 = Calendar.getInstance(timeZone);
-		processDateTime2.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+
+		ZonedDateTime processDateTime2 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		ArrayList<Promotion> pList2 = cp.getRelatedPromotions(cart2, processDateTime2);
 		assertEquals(pList2.size(), 2);
 		assertEquals(pList2.get(0).getName(), "B");
 		assertEquals(pList2.get(1).getName(), "A");
-		processDateTime2.set(2022, 11, 25, 0, 0); //2022-dec-25 0:00am
+		processDateTime2 = ZonedDateTime.of(2022, 12, 25, 0, 0, 0, 0, zoneId); //2022-dec-25 0:00am
 		pList2 = cp.getRelatedPromotions(cart2, processDateTime2);
 		assertEquals(pList2.size(), 0);
 		
 		
-		Calendar processDateTime3 = Calendar.getInstance(timeZone);
-		processDateTime3.set(2021, 11, 25, 0, 0); //2021-dec-25 0:00am
+		ZonedDateTime processDateTime3 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		ArrayList<Promotion> pList3 = cp.getRelatedPromotions(cart3, processDateTime3);
 		assertEquals(pList3.size(), 5);
 		assertEquals(pList3.get(0).getName(), "F");
@@ -71,7 +71,7 @@ class UnitTest4_CartPromotion {
 		assertEquals(pList3.get(3).getName(), "D");
 		assertEquals(pList3.get(4).getName(), "C");
 		
-		processDateTime3.set(2022, 11, 25, 0, 0); //2022-dec-25 0:00am
+		processDateTime3 = ZonedDateTime.of(2022, 12, 25, 0, 0, 0, 0, zoneId); //2022-dec-25 0:00am
 		pList3 = cp.getRelatedPromotions(cart3, processDateTime3);
 		assertEquals(pList3.size(), 0);
 		
