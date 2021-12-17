@@ -10,9 +10,9 @@ As a data set of items
 Promotion object contains the start/end date time of the promotion (with TimeZone), which item(s) and its quantity will be required to fulfill this promotion, and the discount price / percentage of this promotion.
 
 ### CartPromotion
-Object to calculate which promotion could be applied by providing a shopping cart. It would be easier and faster if a relational DB would be applied (one-to-many relationship of Promotion & PromotionItem). In fact, just query the PromotionItem by all item's id (name, in this case) and you will find out all the related Promotion already. However, there is no DB in time question.
+Object to calculate which promotion could be applied by providing a shopping cart. It would be easier and faster if a relational DB would be applied (one-to-many relationship of Promotion & PromotionItem). In fact, just query the PromotionItem by all item's id (name, in this case) and you will find out all the related Promotion already. However, there is no DB in this question.
 
-This object stores several different kind of promotions as a DB. An algorithm has been applied on the selection to speed up if there are thousands of promotions and hundreds of items in the cart, which would would be explained in later section.
+Therefore, this object stores several different kind of promotions as a DB. An algorithm has been applied on the selection to speed up if there are thousands of promotions and hundreds of items in the cart, which would would be explained in later section.
 
 ### Cart
 Shopping Cart object. There are 2 attributes represeting the selected items: <i>myCart</i>, and <i>promotionGroup</i>.
@@ -75,16 +75,18 @@ Imagine if there are thousands promotions and hundreds of selected item in the c
 </tr>
 </table>
 Case 1: The cart contains 3 units of Item A.
+
 + 1st round loop:
 Checking with each promotion's first required item and its quantity, which are 2A, 2A, 3C, 5C, 7C and 3A. We keep Promo-A, B, & F for the next round. Also, it saves the max number of required individual items in this round in order to see how many times of the loop should be. In this case, it is 3 (there are 3 individual items required in Promo-F).
 + 2nd round loop:
-Checking with the promotion kept from last round by using its 2nd required item and its quantity (if any), We keep Promo-A (since there is no more requirement) only and ignore B & F. And the loop.
+Checking with the promotion kept from last round by using its 2nd required item and its quantity (if any), We keep Promo-A (since there is no more requirement) only and ignore B & F.
 + 3rd round loop:
 The loop keeps Promo-A and ends here.
 
 It founds only Promo-A is eligable in this cart.
 
 Case 2: The cart contains 3 units of A, 2 units of B, and 5 units of C.
+
 + 1st round loop:
 It keeps Promo-A, B, C, D, & F. The max times of the loop should be 3 (Promo-F).
 + 2nd round loop:
