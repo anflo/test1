@@ -138,7 +138,7 @@ class UnitTest5_Cart_Promotion_Process {
 		//cart 6: real-time moving along items
 		ZonedDateTime processDateTime6 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
 		//Step 1: add Promotion-C into cart
-		cart6.addPromotionGroup(cp.getPromotionByName("C"));
+		cart6.addPromotionGroup(cp.getPromotionByNameFromList("C"));
 		PromotionProcess pc6 = new PromotionProcess(cart6);
 		cart6 = pc6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
 		ArrayList<Promotion> p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
@@ -147,7 +147,7 @@ class UnitTest5_Cart_Promotion_Process {
 		assertEquals(cart6.getItemQuanitiy(ItemDB.ITEM_C), 0);
 		assertEquals(cart6.getPromotedItemQty(ItemDB.ITEM_C), 3);
 		//Step 2: add Promotion-D into cart, and then since there would be 8C, it should be turning into Promotion-E, and remains 1C in non-promotion item cart
-		cart6.addPromotionGroup(cp.getPromotionByName("D"));
+		cart6.addPromotionGroup(cp.getPromotionByNameFromList("D"));
 		cart6 = pc6.applyPromotion(processDateTime6); //re-calculate all possible promotions for bigger save
 		p6Group = (ArrayList<Promotion>) cart6.getPromotionGroup();
 		assertEquals(p6Group.size(), 1);

@@ -30,7 +30,11 @@ public class PromotionProcess {
 		}
 		
 		CartPromotion cp = new CartPromotion();
-		ArrayList<Promotion> pList = cp.getRelatedPromotions(this.cart, processDateCalendar);
+//		ArrayList<Promotion> pList = cp.getRelatedPromotionsFromList(this.cart, processDateCalendar);
+		//
+		cp.refreshPromotionMap(processDateCalendar);
+		ArrayList<Promotion> pList = cp.getRelatedPromotionsFromMap(this.cart);
+		
 		if(pList!=null) {
 			for(int i=0; i<pList.size();) {
 				Promotion p = pList.get(i);

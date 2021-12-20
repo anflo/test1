@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import item.Item;
 import item.ItemDB;
@@ -21,11 +23,13 @@ import item.promotion.PromotionItem;
 //used to calculate all potential promotion based on the inputted cart
 public class CartPromotion {
 
-	ArrayList<Promotion> promotionList;
+	private ArrayList<Promotion> promotionList;
+	private HashMap<String, ArrayList<Promotion>> promotionMap;
 	
 	public CartPromotion() {
 		super();
 		promotionList = new ArrayList();
+		promotionMap = new HashMap<String, ArrayList<Promotion>>();
 		initPromotionList();
 	}
 	
@@ -40,7 +44,8 @@ public class CartPromotion {
 	 * F: 3A+2B+C = 30% off, $69 saved
 	 */
 	private void initPromotionList() {
-		ZoneId zoneId = ZoneId.of("UTC+0");;
+		ZoneId zoneId = ZoneId.of("UTC+0");
+		promotionList = new ArrayList();
 		
 		//promotion set A, 2A = 10% off
 		ZonedDateTime promotionAStartDateTime = ZonedDateTime.of(2021, 12, 20, 4, 0, 0, 0, zoneId); //2021-dec-20 4:00am
@@ -143,7 +148,49 @@ public class CartPromotion {
 		
 	}
 
-	public Promotion getPromotionByName(String name) {
+	//start over to recalculate all promotion into the map
+	public void refreshPromotionMap() {
+		refreshPromotionMap(ZonedDateTime.now());
+	}
+	public void refreshPromotionMap(ZonedDateTime processDateCalendar) {
+		initPromotionList(); //simulate reload all promotions from DB
+		for(Promotion p: promotionList) {
+			if (!p.isOnPromotion(processDateCalendar)) {
+				continue;
+			}
+			ArrayList<PromotionItem> promotionItemCombination = (ArrayList<PromotionItem>)p.getPromotionItemCombination();
+			if (promotionItemCombination!=null && promotionItemCombination.size()>0) {
+				for(PromotionItem pi: promotionItemCombination) {
+					Item i = pi.getItem();
+					String keyOfMap = getMapKeyFromItem(i);
+					if(keyOfMap!=null && keyOfMap.length()>0) {
+						ArrayList<Promotion> existingPromotionList = promotionMap.get(keyOfMap);
+						if (existingPromotionList==null || existingPromotionList.size()<=0) {
+							existingPromotionList = new ArrayList<Promotion>();
+						}	
+						existingPromotionList.add(p);
+						promotionMap.put(keyOfMap, existingPromotionList);	
+						
+					}
+				}
+			}
+		}
+		
+		//re-calculate the priority
+		for (String keyOfMap : promotionMap.keySet()) {
+			ArrayList<Promotion> newPromotionList = prioritisedPromotion(promotionMap.get(keyOfMap));
+			promotionMap.put(keyOfMap, newPromotionList);
+		}
+	}
+	
+	private String getMapKeyFromItem(Item p) {
+		if (p!=null && p.getSku()!=null && p.getSku().length()>0) {
+			return p.getSku();
+		}
+		return null;
+	}
+	
+	public Promotion getPromotionByNameFromList(String name) {
 		for(Promotion p: promotionList) {
 			if (p.getName().equals(name)) {
 				return p;
@@ -151,6 +198,18 @@ public class CartPromotion {
 		}
 		return null;
 	}
+	
+//	public ArrayList<Promotion> getPromotionByPromotionFromMap(Promotion p) {
+//		String keyOfMap = getMapKeyFromItem(p);
+//		if (keyOfMap!=null && keyOfMap.length()>0 &&
+//			this.promotionMap!=null && this.promotionMap.containsKey(keyOfMap)) {
+//			ArrayList<Promotion> existingPromotionList = existingPromotionList = promotionMap.get(keyOfMap); 
+//			if (existingPromotionList!=null) {
+//				return existingPromotionList;
+//			}
+//		}
+//		return null;
+//	}
 	
 	// Below process would be a lot faster by querying from DB using all items' SKU directly.
 	// For e.g.: A one-to-many relationship of Promotion & PromotionItems structure. I can just
@@ -160,10 +219,10 @@ public class CartPromotion {
 	// I made below algorithm to query the related promotion.
 	// -----
 	// - the cart input should be taken off all promotions already
-	public ArrayList<Promotion> getRelatedPromotions(Cart cart){
-		return getRelatedPromotions(cart, ZonedDateTime.now()); //current timestamp with server timezone if no datetime is provided
+	public ArrayList<Promotion> getRelatedPromotionsFromList(Cart cart){
+		return getRelatedPromotionsFromList(cart, ZonedDateTime.now()); //current timestamp with server timezone if no datetime is provided
 	}
-	public ArrayList<Promotion> getRelatedPromotions(Cart cart, ZonedDateTime processDateCalendar){
+	public ArrayList<Promotion> getRelatedPromotionsFromList(Cart cart, ZonedDateTime processDateCalendar){
 		ArrayList<Promotion> returnPromotionList = promotionList; //put all the promotion list in here, and then eliminate one-by-one //new ArrayList<Promotion>();
 		
 		int maxItemSetSizeOfRelatedPromotionCombination = -1;
@@ -199,6 +258,26 @@ public class CartPromotion {
 		} while (promotionItemSetIndex<maxItemSetSizeOfRelatedPromotionCombination);
 		
 		returnPromotionList = prioritisedPromotion(returnPromotionList);
+		return returnPromotionList;
+	}
+	
+	public ArrayList<Promotion> getRelatedPromotionsFromMap(Cart cart){
+		ArrayList<Promotion> returnPromotionList = new ArrayList<Promotion>();
+		
+		HashMap<String, CartItem> myCart = cart.getMyCart();
+		for (String keyOfCartMap : myCart.keySet()) {
+			CartItem ci = myCart.get(keyOfCartMap);
+			Item i = ci.getItem();
+			int cartItemQty = ci.getQuantity();
+			String keyOfPromotionHashMap = this.getMapKeyFromItem(i);
+			ArrayList<Promotion> pList = this.promotionMap.get(keyOfPromotionHashMap); 
+			if (pList!=null && pList.size()>0) {
+				returnPromotionList.addAll(pList);
+			}
+		}
+		returnPromotionList = (ArrayList<Promotion>) returnPromotionList.stream().distinct().collect(Collectors.toList());
+		returnPromotionList = prioritisedPromotion(returnPromotionList);
+		
 		return returnPromotionList;
 	}
 	

@@ -26,6 +26,7 @@ class UnitTest4_CartPromotion {
 	@BeforeEach
 	void setUp() throws Exception {
 		cp = new CartPromotion();
+		
 		zoneId = ZoneId.of("UTC+0");
 		
 		cart1 = new Cart();
@@ -44,26 +45,26 @@ class UnitTest4_CartPromotion {
 	@Test
 	void simpleTestOnCardPromotionAlgorithm() {
 		ZonedDateTime processDateTime1 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
-		ArrayList<Promotion> pList1 = cp.getRelatedPromotions(cart1, processDateTime1);
+		ArrayList<Promotion> pList1 = cp.getRelatedPromotionsFromList(cart1, processDateTime1);
 		assertEquals(pList1.size(), 1);
 		assertEquals(pList1.get(0).getName(), "A");
 		processDateTime1 = ZonedDateTime.of(2022, 12, 25, 0, 0, 0, 0, zoneId); //2022-dec-25 0:00am
-		pList1 = cp.getRelatedPromotions(cart1, processDateTime1);
+		pList1 = cp.getRelatedPromotionsFromList(cart1, processDateTime1);
 		assertEquals(pList1.size(), 0);
 		
 
 		ZonedDateTime processDateTime2 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
-		ArrayList<Promotion> pList2 = cp.getRelatedPromotions(cart2, processDateTime2);
+		ArrayList<Promotion> pList2 = cp.getRelatedPromotionsFromList(cart2, processDateTime2);
 		assertEquals(pList2.size(), 2);
 		assertEquals(pList2.get(0).getName(), "B");
 		assertEquals(pList2.get(1).getName(), "A");
 		processDateTime2 = ZonedDateTime.of(2022, 12, 25, 0, 0, 0, 0, zoneId); //2022-dec-25 0:00am
-		pList2 = cp.getRelatedPromotions(cart2, processDateTime2);
+		pList2 = cp.getRelatedPromotionsFromList(cart2, processDateTime2);
 		assertEquals(pList2.size(), 0);
 		
 		
 		ZonedDateTime processDateTime3 = ZonedDateTime.of(2021, 12, 25, 0, 0, 0, 0, zoneId); //2021-dec-25 0:00am
-		ArrayList<Promotion> pList3 = cp.getRelatedPromotions(cart3, processDateTime3);
+		ArrayList<Promotion> pList3 = cp.getRelatedPromotionsFromList(cart3, processDateTime3);
 		assertEquals(pList3.size(), 5);
 		assertEquals(pList3.get(0).getName(), "F");
 		assertEquals(pList3.get(1).getName(), "B");
@@ -72,7 +73,7 @@ class UnitTest4_CartPromotion {
 		assertEquals(pList3.get(4).getName(), "C");
 		
 		processDateTime3 = ZonedDateTime.of(2022, 12, 25, 0, 0, 0, 0, zoneId); //2022-dec-25 0:00am
-		pList3 = cp.getRelatedPromotions(cart3, processDateTime3);
+		pList3 = cp.getRelatedPromotionsFromList(cart3, processDateTime3);
 		assertEquals(pList3.size(), 0);
 		
 		
