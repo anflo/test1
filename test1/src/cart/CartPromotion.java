@@ -154,6 +154,7 @@ public class CartPromotion {
 	}
 	public void refreshPromotionMap(ZonedDateTime processDateCalendar) {
 		initPromotionList(); //simulate reload all promotions from DB
+		promotionMap = new HashMap<String, ArrayList<Promotion>>();
 		for(Promotion p: promotionList) {
 			if (!p.isOnPromotion(processDateCalendar)) {
 				continue;
@@ -199,68 +200,14 @@ public class CartPromotion {
 		return null;
 	}
 	
-//	public ArrayList<Promotion> getPromotionByPromotionFromMap(Promotion p) {
-//		String keyOfMap = getMapKeyFromItem(p);
-//		if (keyOfMap!=null && keyOfMap.length()>0 &&
-//			this.promotionMap!=null && this.promotionMap.containsKey(keyOfMap)) {
-//			ArrayList<Promotion> existingPromotionList = existingPromotionList = promotionMap.get(keyOfMap); 
-//			if (existingPromotionList!=null) {
-//				return existingPromotionList;
-//			}
-//		}
-//		return null;
-//	}
-	
+	//Update from 20/Dec/2021, no longer useful by getting the related promotion from List, as it could be using Hashmap to speed up
 	// Below process would be a lot faster by querying from DB using all items' SKU directly.
 	// For e.g.: A one-to-many relationship of Promotion & PromotionItems structure. I can just
 	// gather all items' SKU, query the PromotionItems.SKU (or PromotionItems.item_id.SKU). I'll
 	// have a list of Promotion set immediately. The speed is fast by adding index on PromotionItems.SKU (or PromotionItems.item_id.SKU).
 	// However, since there is DB and I assume there could be more then a thousand promotions and over a hundred items in the cart,
-	// I made below algorithm to query the related promotion.
 	// -----
 	// - the cart input should be taken off all promotions already
-	public ArrayList<Promotion> getRelatedPromotionsFromList(Cart cart){
-		return getRelatedPromotionsFromList(cart, ZonedDateTime.now()); //current timestamp with server timezone if no datetime is provided
-	}
-	public ArrayList<Promotion> getRelatedPromotionsFromList(Cart cart, ZonedDateTime processDateCalendar){
-		ArrayList<Promotion> returnPromotionList = promotionList; //put all the promotion list in here, and then eliminate one-by-one //new ArrayList<Promotion>();
-		
-		int maxItemSetSizeOfRelatedPromotionCombination = -1;
-		//For example, [3A = 10% off] contains 1 item, maxItemSetSizeOfRelatedPromotionCombination=1.
-		//[3A+2B = 15% off] contains 2 items, maxItemSetSizeOfRelatedPromotionCombination=2
-		//[3A+2B+1C = 20% off] contains 3 items, maxItemSetSizeOfRelatedPromotionCombination=3
-		int promotionItemSetIndex = 0;
-		do {
-			ArrayList<Promotion> tempNewPromotionList = new ArrayList<Promotion>();
-			for(Promotion p: returnPromotionList) {
-				if (!p.isOnPromotion(processDateCalendar)) {
-					continue;
-				}
-				List<PromotionItem> pComb = p.getPromotionItemCombination();
-				if (pComb.size()>maxItemSetSizeOfRelatedPromotionCombination) maxItemSetSizeOfRelatedPromotionCombination=pComb.size(); //should just useful in the first loop
-				
-				if (pComb.size()-1<promotionItemSetIndex) {
-					tempNewPromotionList.add(p);
-					continue;
-				}
-				
-				PromotionItem promotionItemNode = pComb.get(promotionItemSetIndex);
-				Item pItem = promotionItemNode.getItem();
-				int pQty = promotionItemNode.getQuantity();
-				
-				int qtyInCart = cart.getItemQuanitiy(pItem);
-				if (qtyInCart>=pQty) {
-					tempNewPromotionList.add(p);
-				}
-			}
-			returnPromotionList = tempNewPromotionList;
-			promotionItemSetIndex++;
-		} while (promotionItemSetIndex<maxItemSetSizeOfRelatedPromotionCombination);
-		
-		returnPromotionList = prioritisedPromotion(returnPromotionList);
-		return returnPromotionList;
-	}
-	
 	public ArrayList<Promotion> getRelatedPromotionsFromMap(Cart cart){
 		ArrayList<Promotion> returnPromotionList = new ArrayList<Promotion>();
 		
